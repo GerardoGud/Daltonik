@@ -5,25 +5,23 @@
  */
 package modelo.pantallas;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import javax.swing.table.DefaultTableModel;
-import modelo.datos.ConnectURL;
+import modelo.datos.EmpaqueDAO;
+import modelo.beans.Empaque;
 
 /**
  *
  * @author LuisCerv
  */
 public class PEmpaque extends javax.swing.JPanel {
-    CallableStatement cts;
-    ResultSet r;
-    ConnectURL cn;
+    private EmpaqueDAO edao;
+    private Empaque emp;
     /**
      * Creates new form PEmpaque
      */
     public PEmpaque() {
         initComponents();
-        cn=new ConnectURL();
+        edao=new EmpaqueDAO();
+        emp=new Empaque();
         cargar();
     }
 
@@ -36,11 +34,11 @@ public class PEmpaque extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        tNombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        tCapacidad = new javax.swing.JTextField();
+        tUnidad = new javax.swing.JTextField();
+        chkEstatus = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -48,18 +46,18 @@ public class PEmpaque extends javax.swing.JPanel {
         tDatos = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
-        jTextField1.setText("jTextField1");
+        tNombre.setText("jTextField1");
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        jTextField2.setText("jTextField2");
+        tCapacidad.setText("jTextField2");
 
-        jTextField3.setText("jTextField3");
+        tUnidad.setText("jTextField3");
 
-        jCheckBox1.setText("Activar");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        chkEstatus.setText("Activar");
+        chkEstatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                chkEstatusActionPerformed(evt);
             }
         });
 
@@ -74,16 +72,31 @@ public class PEmpaque extends javax.swing.JPanel {
 
         tDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "idEmpaque", "Nombre", "Capacidad", "Estatus", "idUnidadMedida"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tDatos);
+        if (tDatos.getColumnModel().getColumnCount() > 0) {
+            tDatos.getColumnModel().getColumn(0).setResizable(false);
+            tDatos.getColumnModel().getColumn(1).setResizable(false);
+            tDatos.getColumnModel().getColumn(2).setResizable(false);
+            tDatos.getColumnModel().getColumn(3).setResizable(false);
+            tDatos.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -112,12 +125,12 @@ public class PEmpaque extends javax.swing.JPanel {
                                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBox1)
+                                    .addComponent(chkEstatus)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(tUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(36, 36, 36)
                                         .addComponent(jButton1)))
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -129,19 +142,19 @@ public class PEmpaque extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
+                .addComponent(chkEstatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
@@ -149,46 +162,41 @@ public class PEmpaque extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+    private void chkEstatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEstatusActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_chkEstatusActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       cn.ejecutar("INSERT INTO Empaques VALUES (3,'Bolsa',2.5,'A',1);");
+        emp=new Empaque();
+        emp.setIdUnidad(0);
+        emp.setCapacidad(Double.parseDouble(this.tCapacidad.getText()));
+        emp.setNombre(this.tNombre.getText());
+        emp.setIdUnidad(Integer.parseInt(this.tUnidad.getText()));
+        if(this.chkEstatus.isSelected()){
+            emp.setEstatus("A");
+        }else{
+            emp.setEstatus("I");
+        }
+        edao.guardarEmpaque(emp);
     }//GEN-LAST:event_jButton1ActionPerformed
     public void cargar() {
-        DefaultTableModel tabla = new DefaultTableModel();
-        try {
-            tabla.addColumn("idEmpaque");
-            tabla.addColumn("nombre");
-            tabla.addColumn("capacidad");
-            tabla.addColumn("estatus");
-            tabla.addColumn("idUnidad");
-            r = cn.ejecutar("select * from Empaques");
-            while (r.next()) {
-                Object dato[] = new Object[5];
-                for (int i = 0; i < 5; i++) {
-                    dato[i] = r.getString(i + 1);
-                }
-                tabla.addRow(dato);
-            }
-            this.tDatos.setModel(tabla);//jTable---jdatos
-            this.repaint();
-        } catch (Exception e) {
-        }
+        this.tDatos.setModel(edao.cargarTabla(tDatos));
+    }
+    public void datoTabla(){
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField tCapacidad;
     private javax.swing.JTable tDatos;
+    private javax.swing.JTextField tNombre;
+    private javax.swing.JTextField tUnidad;
     // End of variables declaration//GEN-END:variables
 }
