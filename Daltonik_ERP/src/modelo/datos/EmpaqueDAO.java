@@ -65,6 +65,22 @@ public class EmpaqueDAO {
             return null;
         }
     }
+    public Empaque buscarIdEdicion(int id) {
+        Empaque em=new Empaque();
+        try {
+            r = cn.consultar("select * from Empaques where idEmpaque="+id+";");
+            while (r.next()) {
+                em.setIdEmpaque(r.getInt(1));
+                em.setNombre(r.getString(2));
+                em.setCapacidad(r.getDouble(3));
+                em.setEstatus(r.getString(4));
+                em.setIdUnidad(r.getInt(5));
+            }
+            return em;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+    }
     public void guardarEmpaque(Empaque emp){
         try {
             cn.ejecutar("INSERT INTO Empaques VALUES ("+emp.getIdEmpaque()+",'"+emp.getNombre()

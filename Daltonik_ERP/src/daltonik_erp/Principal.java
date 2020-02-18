@@ -5,7 +5,10 @@
  */
 package daltonik_erp;
 
+import modelo.pantallas.PCategorias;
 import modelo.pantallas.PEmpaque;
+import modelo.pantallas.PLaboratorios;
+import modelo.pantallas.PMedida;
 
 /**
  *
@@ -46,8 +49,10 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        mCategorias = new javax.swing.JMenuItem();
+        mMedidas = new javax.swing.JMenuItem();
+        mEmpaques = new javax.swing.JMenuItem();
+        mLaboratorios = new javax.swing.JMenuItem();
 
         jButton1.setText("jButton1");
 
@@ -56,44 +61,63 @@ public class Principal extends javax.swing.JFrame {
         lUsuario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lUsuario.setText("Sesion activa: ");
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/closeWindow.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/next.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/back.png"))); // NOI18N
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jMenu1.setText("File");
+        jMenu1.setText("Sesion");
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Compras x");
 
-        jMenuItem1.setText("Muestra");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mCategorias.setText("Categorias");
+        mCategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mCategoriasActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        jMenu2.add(mCategorias);
 
-        jMenuItem2.setText("Empaques");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        mMedidas.setText("UnidadMedida");
+        mMedidas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                mMedidasActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(mMedidas);
+
+        mEmpaques.setText("Empaques");
+        mEmpaques.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mEmpaquesActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mEmpaques);
+
+        mLaboratorios.setText("Laboratorios");
+        mLaboratorios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLaboratoriosActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mLaboratorios);
 
         jMenuBar1.add(jMenu2);
 
@@ -135,10 +159,10 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       PanelMuestra pm=new PanelMuestra();
-        this.Pantallas.add("Pantalla de muestra",pm);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void mCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCategoriasActionPerformed
+       PCategorias pe=new PCategorias ();
+        this.Pantallas.add("Categorias ",pe);
+    }//GEN-LAST:event_mCategoriasActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if(this.Pantallas.getComponentCount()>0){
@@ -149,19 +173,43 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        int limit=this.Pantallas.getComponentCount();
+        int sel=this.Pantallas.getSelectedIndex();
+        if(limit>0){
+            if(sel<limit-1){
+                this.Pantallas.setSelectedIndex(sel+1);
+            }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        int limit=this.Pantallas.getComponentCount();
+        int sel=this.Pantallas.getSelectedIndex();
+        if(limit>0){
+            if(sel>0){
+                this.Pantallas.setSelectedIndex(sel-1);
+            }
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void mEmpaquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mEmpaquesActionPerformed
         // TODO add your handling code here:
         PEmpaque pe=new PEmpaque ();
         this.Pantallas.add("Empaques",pe);
         
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_mEmpaquesActionPerformed
+
+    private void mMedidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mMedidasActionPerformed
+        PMedida pm=new PMedida ();
+        this.Pantallas.add("Medidas",pm);
+    }//GEN-LAST:event_mMedidasActionPerformed
+
+    private void mLaboratoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLaboratoriosActionPerformed
+        // TODO add your handling code here:
+        PLaboratorios pe=new PLaboratorios ();
+        this.Pantallas.add("Laboratorios",pe);
+    }//GEN-LAST:event_mLaboratoriosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,8 +255,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JLabel lUsuario;
+    private javax.swing.JMenuItem mCategorias;
+    private javax.swing.JMenuItem mEmpaques;
+    private javax.swing.JMenuItem mLaboratorios;
+    private javax.swing.JMenuItem mMedidas;
     // End of variables declaration//GEN-END:variables
 }

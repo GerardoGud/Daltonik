@@ -5,6 +5,8 @@
  */
 package daltonik_erp;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +20,14 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        this.tpContrasena.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if ((caracter == KeyEvent.VK_ENTER)) {
+                    revisar();
+                }
+            }
+        });
     }
 
     /**

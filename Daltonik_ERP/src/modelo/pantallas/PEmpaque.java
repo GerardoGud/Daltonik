@@ -5,6 +5,8 @@
  */
 package modelo.pantallas;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import modelo.datos.EmpaqueDAO;
 import modelo.beans.Empaque;
 
@@ -15,14 +17,46 @@ import modelo.beans.Empaque;
 public class PEmpaque extends javax.swing.JPanel {
     private EmpaqueDAO edao;
     private Empaque emp;
+    private boolean edit;
     /**
      * Creates new form PEmpaque
      */
     public PEmpaque() {
         initComponents();
+        edit=false;
         edao=new EmpaqueDAO();
         emp=new Empaque();
         cargar();
+        this.tBusqueda.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tUnidad.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tCapacidad.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)&& (caracter != '.')) {
+                    e.consume();
+                }
+            }
+        });
     }
 
     /**
@@ -44,12 +78,14 @@ public class PEmpaque extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tDatos = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        bGuardar = new javax.swing.JButton();
         tBusqueda = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        bBuscar = new javax.swing.JButton();
+        bEditar = new javax.swing.JButton();
+        bEliminar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        tIdEmpaque = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -103,35 +139,43 @@ public class PEmpaque extends javax.swing.JPanel {
             tDatos.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jButton1.setText("Guardar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bGuardar.setText("Guardar");
+        bGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bGuardarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Buscar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        bBuscar.setText("Buscar");
+        bBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                bBuscarActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Editar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        bEditar.setText("Editar");
+        bEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                bEditarActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Eliminar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        bEliminar.setText("Eliminar");
+        bEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                bEliminarActionPerformed(evt);
             }
         });
 
         jLabel2.setText("idEmpaque");
+
+        tIdEmpaque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tIdEmpaqueActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("idEmpaque");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -149,43 +193,55 @@ public class PEmpaque extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(chkEstatus)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton1)
+                                        .addComponent(bGuardar)
                                         .addGap(222, 222, 222))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(tUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(tUnidad, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                            .addComponent(tCapacidad, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                            .addComponent(tNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                            .addComponent(tIdEmpaque))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGap(50, 50, 50)
-                                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGap(50, 50, 50)
-                                                    .addComponent(jButton4)))
+                                                .addComponent(bEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(bEliminar))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel2)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton2))))))
+                                                .addComponent(bBuscar))))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bBuscar)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bEliminar)
+                        .addGap(2, 2, 2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(tIdEmpaque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
@@ -196,25 +252,14 @@ public class PEmpaque extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
-                        .addGap(2, 2, 2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel4))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jButton1)
+                        .addComponent(bGuardar)
                         .addGap(33, 33, 33)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(chkEstatus)
@@ -226,9 +271,9 @@ public class PEmpaque extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_chkEstatusActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
         emp=new Empaque();
-        emp.setIdUnidad(0);
+        emp.setIdEmpaque(Integer.parseInt(this.tIdEmpaque.getText()));
         emp.setCapacidad(Double.parseDouble(this.tCapacidad.getText()));
         emp.setNombre(this.tNombre.getText());
         emp.setIdUnidad(Integer.parseInt(this.tUnidad.getText()));
@@ -239,46 +284,92 @@ public class PEmpaque extends javax.swing.JPanel {
         }
         edao.guardarEmpaque(emp);
         cargar();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        limpiar();
+        
+    }//GEN-LAST:event_bGuardarActionPerformed
 
     private void tCapacidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCapacidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tCapacidadActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
         edao.eliminarEmpaque(Integer.parseInt(this.tBusqueda.getText()));
         cargar();
-    }//GEN-LAST:event_jButton4ActionPerformed
+        limpiar();
+    }//GEN-LAST:event_bEliminarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
         // TODO add your handling code here:
         this.tDatos.setModel(edao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
-    }//GEN-LAST:event_jButton2ActionPerformed
+        limpiar();
+    }//GEN-LAST:event_bBuscarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        if(edit) {
+            emp = new Empaque();
+            emp.setIdUnidad(Integer.parseInt(this.tBusqueda.getText()));
+            emp.setCapacidad(Double.parseDouble(this.tCapacidad.getText()));
+            emp.setNombre(this.tNombre.getText());
+            emp.setIdUnidad(Integer.parseInt(this.tUnidad.getText()));
+            if (this.chkEstatus.isSelected()) {
+                emp.setEstatus("A");
+            } else {
+                emp.setEstatus("I");
+            }
+            edao.editarEmpaque(emp, emp.getIdEmpaque());
+            cargar();
+            limpiar();
+        }else{
+            edit=true;
+            this.tDatos.setModel(edao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+            emp = edao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
+            this.tNombre.setText(emp.getNombre());
+            this.tCapacidad.setText(String.valueOf(emp.getCapacidad()));
+            this.tUnidad.setText(String.valueOf(emp.getIdUnidad()));
+            if (emp.getEstatus().equals("A")) {
+                this.chkEstatus.setSelected(true);
+            } else {
+                this.chkEstatus.setSelected(false);
+            }
+        }
+        this.bBuscar.setVisible(!edit);
+        this.bEliminar.setVisible(!edit);
+        this.bGuardar.setVisible(!edit);
+    }//GEN-LAST:event_bEditarActionPerformed
+
+    private void tIdEmpaqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdEmpaqueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tIdEmpaqueActionPerformed
     public void cargar() {
         this.tDatos.setModel(edao.cargarTabla(tDatos));
+    }
+    public void limpiar(){
+        this.tCapacidad.setText("");
+        this.tIdEmpaque.setText("");
+        this.tNombre.setText("");
+        this.tUnidad.setText("");
     }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bBuscar;
+    private javax.swing.JButton bEditar;
+    private javax.swing.JButton bEliminar;
+    private javax.swing.JButton bGuardar;
     private javax.swing.JCheckBox chkEstatus;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField tBusqueda;
     private javax.swing.JTextField tCapacidad;
     private javax.swing.JTable tDatos;
+    private javax.swing.JTextField tIdEmpaque;
     private javax.swing.JTextField tNombre;
     private javax.swing.JTextField tUnidad;
     // End of variables declaration//GEN-END:variables
