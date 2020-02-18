@@ -42,6 +42,41 @@ public class LaboratoriosDAO {
             return null;
         }
     }
+    public DefaultTableModel buscarId(JTable tDatos,int id) {
+        DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
+        tabla.setRowCount(0);
+        try {
+            r = cn.consultar("select * from Laboratorios where idLaboratorio="+id+";");
+            while (r.next()) {
+                Vector dato = new Vector();
+                dato.add(r.getInt(1));
+                dato.add(r.getString(2));
+                dato.add(r.getString(3));
+                dato.add(r.getString(4));
+                tabla.addRow(dato);
+                tDatos.setModel(tabla);
+            }
+            return tabla;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+    }
+        public Laboratorios buscarIdEdicion(int id) {
+        Laboratorios em=new Laboratorios();
+        try {
+            r = cn.consultar("select * from Laboratorios where idLaboratorio="+id+";");
+            while (r.next()) {
+                em.setIdLaboratorio(r.getInt(1));
+                em.setNombre(r.getString(2));
+                em.setOrigen(r.getString(3));
+                em.setEstatus(r.getString(4));
+            }
+            return em;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+        }
+        
     public void guardarLaboratorio(Laboratorios lab){
         try {
             cn.ejecutar("INSERT INTO Laboratorios VALUES ("+lab.getIdLaboratorio()+",'"+lab.getNombre()
@@ -64,6 +99,19 @@ public class LaboratoriosDAO {
 		}
 		return idLaboratorioU;
 	}
+    public void editarLaboratorio(Laboratorios lab,int id){
+        try {
+            cn.ejecutar("update Laboratorios set origen='"+lab.getOrigen()+"', nombre='"+lab.getNombre()
+                    +"',estatus='"+lab.getEstatus()+"' where idLaboratorio="+id+";");
+        } catch (Exception e) {
+        }
+    }
+    public void eliminarLaboratorio(int id){
+        try {
+            cn.ejecutar("update Laboratorios set estatus='I' where idLaboratorio="+id+";");
+        } catch (Exception e) {
+        }
+    }
     
     
 }

@@ -287,6 +287,7 @@ public class PMedida extends javax.swing.JPanel {
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
         if(edit) {
+            edit=false;
             med=new Medida();
     med.setIdUnidad(Integer.parseInt(this.tBusqueda.getText()));
     med.setNombre(this.tNombre.getText());

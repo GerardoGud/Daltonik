@@ -13,13 +13,13 @@ public class Laboratorios {
     private int idLaboratorio;
     private String nombre;
     private String origen;
-    private char estatus;
+    private String estatus;
 
     public Laboratorios(){
     
     }
     
-    public Laboratorios(int idLaboratorio, String nombre, String origen, char estatus) {
+    public Laboratorios(int idLaboratorio, String nombre, String origen, String estatus) {
         this.idLaboratorio = idLaboratorio;
         this.nombre = nombre;
         this.origen = origen;
@@ -50,11 +50,11 @@ public class Laboratorios {
         this.origen = origen;
     }
 
-    public char getEstatus() {
+    public String getEstatus() {
         return estatus;
     }
 
-    public void setEstatus(char estatus) {
+    public void setEstatus(String estatus) {
         this.estatus = estatus;
     }
 }

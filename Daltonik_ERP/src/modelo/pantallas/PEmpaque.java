@@ -308,6 +308,7 @@ public class PEmpaque extends javax.swing.JPanel {
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
         if(edit) {
+            edit=false;
             emp = new Empaque();
             emp.setIdUnidad(Integer.parseInt(this.tBusqueda.getText()));
             emp.setCapacidad(Double.parseDouble(this.tCapacidad.getText()));

@@ -215,6 +215,7 @@ public class PCategorias extends javax.swing.JPanel {
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
         if (edit) {
+            edit=false;
             cat = new Categorias();
             cat.setNombre(this.tNombre.getText());
             cat.setIdCategoria(Integer.parseInt(this.tBusqueda.getText()));
