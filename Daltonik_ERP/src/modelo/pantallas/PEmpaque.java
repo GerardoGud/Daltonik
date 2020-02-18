@@ -46,13 +46,13 @@ public class PEmpaque extends javax.swing.JPanel {
         tDatos = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
-        tNombre.setText("jTextField1");
-
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        tCapacidad.setText("jTextField2");
-
-        tUnidad.setText("jTextField3");
+        tCapacidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tCapacidadActionPerformed(evt);
+            }
+        });
 
         chkEstatus.setText("Activar");
         chkEstatus.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +178,12 @@ public class PEmpaque extends javax.swing.JPanel {
             emp.setEstatus("I");
         }
         edao.guardarEmpaque(emp);
+        cargar();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tCapacidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCapacidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tCapacidadActionPerformed
     public void cargar() {
         this.tDatos.setModel(edao.cargarTabla(tDatos));
     }
