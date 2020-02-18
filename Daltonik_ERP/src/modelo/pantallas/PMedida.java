@@ -267,6 +267,7 @@ public class PMedida extends javax.swing.JPanel {
         }
         mdao.guardarMedida(med);
         cargar();
+        limpiar();
     
     }//GEN-LAST:event_bGuardarActionPerformed
 
@@ -297,6 +298,7 @@ public class PMedida extends javax.swing.JPanel {
         }
         mdao.editarMedida(med);
         cargar();
+        limpiar();
         }else{
             edit=true;
             this.tDatos.setModel(mdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
@@ -319,6 +321,7 @@ public class PMedida extends javax.swing.JPanel {
         // TODO add your handling code here:
         mdao.eliminarMedida(Integer.parseInt(this.tBusqueda.getText()));
         cargar();
+        limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
 //    public void setMensajes(String msj) {
@@ -327,9 +330,12 @@ public class PMedida extends javax.swing.JPanel {
     public void cargar() {
         this.tDatos.setModel(mdao.cargarTabla(tDatos));
     }
-    public void datoTabla(){
-        
+    public void limpiar(){
+        this.tIdMedida.setText("");
+        this.tNombre.setText("");
+        this.tSiglas.setText("");
     }
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
