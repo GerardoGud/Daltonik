@@ -13,16 +13,18 @@ import modelo.beans.Categorias;
  * @author FranciscoFigueroa
  */
 public class PCategorias extends javax.swing.JPanel {
+
     private CategoriasDAO cdao;
     private Categorias cat;
     private boolean edit;
+
     /**
      * Creates new form PCategorias
      */
     public PCategorias() {
         initComponents();
-        cdao=new CategoriasDAO();
-        cat=new Categorias();
+        cdao = new CategoriasDAO();
+        cat = new Categorias();
         cargar();
         edit = false;
     }
@@ -189,12 +191,12 @@ public class PCategorias extends javax.swing.JPanel {
     }//GEN-LAST:event_chkEstatusActionPerformed
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
-        cat=new Categorias();
+        cat = new Categorias();
         cat.setNombre(this.tNombre.getText());
         cat.setIdCategoria(Integer.parseInt(this.tCategoria.getText()));
-        if(this.chkEstatus.isSelected()){
+        if (this.chkEstatus.isSelected()) {
             cat.setEstatus("A");
-        }else{
+        } else {
             cat.setEstatus("I");
         }
         cdao.guardarCategorias(cat);
@@ -212,7 +214,7 @@ public class PCategorias extends javax.swing.JPanel {
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
-        if(edit) {
+        if (edit) {
             cat = new Categorias();
             cat.setNombre(this.tNombre.getText());
             cat.setIdCategoria(Integer.parseInt(this.tBusqueda.getText()));
@@ -244,15 +246,21 @@ public class PCategorias extends javax.swing.JPanel {
         // TODO add your handling code here:
         cdao.eliminarCategorias(Integer.parseInt(this.tBusqueda.getText()));
         cargar();
+        Limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
     public void cargar() {
         this.tDatos.setModel(cdao.cargarTabla(tDatos));
     }
-    public void datoTabla(){
-        
+
+    public void datoTabla() {
+
     }
-    
-    
+
+    public void Limpiar() {
+        this.tCategoria.setText("");
+        this.tNombre.setText("");
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bEditar;
