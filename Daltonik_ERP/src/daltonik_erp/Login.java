@@ -99,12 +99,19 @@ public class Login extends javax.swing.JFrame {
     private void revisar(){
         String FakeUser="FakeUser";
         String pswd="notExist";
+        String user=this.tUsuario.getText();
         String pwd=String.copyValueOf(tpContrasena.getPassword());
-        if((this.tUsuario.getText().equals(FakeUser))&&(pwd.equals(pswd))){
-            JOptionPane.showMessageDialog(this, "Login correcto\n Por favor espere un momento", "Login", JOptionPane.INFORMATION_MESSAGE);
+        boolean b=modelo.datos.ConnectURL.conectar(user, pwd) != null;
+        if(user.equals(FakeUser)&&(pwd.equals(pswd)) || b){
             tUsuario.setBackground(new java.awt.Color(51,255,153));
             tpContrasena.setBackground(new java.awt.Color(51,255,153));
-            Principal lg= new Principal();
+            JOptionPane.showMessageDialog(this, "Login correcto\n Por favor espere un momento", "Login", JOptionPane.INFORMATION_MESSAGE);
+            Principal lg;
+            if(b){
+                lg= new Principal(user, pwd);
+            }else{
+                lg= new Principal();
+            }
             lg.setVisible(true);
             this.dispose();
         }else{

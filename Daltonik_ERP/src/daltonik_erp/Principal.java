@@ -6,14 +6,14 @@
 package daltonik_erp;
 
 import modelo.pantallas.PEmpaque;
-import modelo.pantallas.PLaboratorios;
 
 /**
  *
  * @author LuisCerv
  */
 public class Principal extends javax.swing.JFrame {
-
+    private String user; 
+    private String pwd;
     /**
      * Creates new form Principal
      */
@@ -21,6 +21,13 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
     }
 
+    public Principal(String user, String pwd) {
+        initComponents();
+        this.user = user;
+        this.pwd = pwd;
+        this.lUsuario.setText("Sesion activa: "+user);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,7 +39,7 @@ public class Principal extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         Pantallas = new javax.swing.JTabbedPane();
-        jLabel1 = new javax.swing.JLabel();
+        lUsuario = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -41,14 +48,13 @@ public class Principal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
 
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("Mensajes");
+        lUsuario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lUsuario.setText("Sesion activa: ");
 
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,14 +95,6 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem2);
 
-        jMenuItem3.setText("Laboratorios");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem3);
-
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -107,7 +105,7 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -130,7 +128,7 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 153, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addComponent(lUsuario)
                 .addGap(4, 4, 4))
         );
 
@@ -162,12 +160,8 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         PEmpaque pe=new PEmpaque ();
         this.Pantallas.add("Empaques",pe);
+        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        PLaboratorios pl=new PLaboratorios();
-        this.Pantallas.add("Laboratorios",pl);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,12 +204,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JLabel lUsuario;
     // End of variables declaration//GEN-END:variables
 }
