@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package modelo.pantallas;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.Medida;
 import modelo.datos.MedidaDAO;
@@ -15,15 +17,38 @@ import modelo.datos.MedidaDAO;
 public class PMedida extends javax.swing.JPanel {
     private MedidaDAO mdao;
     private Medida med;
+    private boolean edit;
+          
     
     /**
      * Creates new form PMedida
      */
     public PMedida() {
         initComponents();
+        edit=false;
         mdao=new MedidaDAO();
         med=new Medida();
         cargar();
+        this.tBusqueda.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tIdMedida.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
     }
 
     /**
@@ -41,11 +66,16 @@ public class PMedida extends javax.swing.JPanel {
         tNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         tSiglas = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        bGuardar = new javax.swing.JButton();
         lMensajes = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tDatos = new javax.swing.JTable();
         chkEstatus = new javax.swing.JCheckBox();
+        tBusqueda = new javax.swing.JTextField();
+        bBuscar = new javax.swing.JButton();
+        bEditar = new javax.swing.JButton();
+        bEliminar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         jLabel1.setText("idMedida");
 
@@ -65,10 +95,10 @@ public class PMedida extends javax.swing.JPanel {
 
         jLabel3.setText("Siglas");
 
-        jButton1.setText("Guardar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bGuardar.setText("Guardar");
+        bGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bGuardarActionPerformed(evt);
             }
         });
 
@@ -108,6 +138,35 @@ public class PMedida extends javax.swing.JPanel {
             }
         });
 
+        tBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBusquedaActionPerformed(evt);
+            }
+        });
+
+        bBuscar.setText("Buscar");
+        bBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBuscarActionPerformed(evt);
+            }
+        });
+
+        bEditar.setText("Editar");
+        bEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEditarActionPerformed(evt);
+            }
+        });
+
+        bEliminar.setText("Eliminar");
+        bEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEliminarActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("idMedida");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -119,47 +178,69 @@ public class PMedida extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tIdMedida, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                            .addComponent(tNombre)
-                            .addComponent(tSiglas))
-                        .addGap(91, 91, 91)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(chkEstatus, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(chkEstatus, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tIdMedida, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                    .addComponent(tNombre)
+                                    .addComponent(tSiglas))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bBuscar))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(57, 57, 57)
+                                        .addComponent(bGuardar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(bEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(bEliminar))))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bBuscar)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bEliminar))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tIdMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(bGuardar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tSiglas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton1)
-                        .addGap(32, 32, 32)
-                        .addComponent(chkEstatus)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                            .addComponent(jLabel3))))
+                .addGap(18, 18, 18)
+                .addComponent(chkEstatus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lMensajes, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -174,7 +255,7 @@ public class PMedida extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_tNombreActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
     med=new Medida();
     med.setIdUnidad(Integer.parseInt(this.tIdMedida.getText()));
     med.setNombre(this.tNombre.getText());
@@ -187,11 +268,58 @@ public class PMedida extends javax.swing.JPanel {
         mdao.guardarMedida(med);
         cargar();
     
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_bGuardarActionPerformed
 
     private void chkEstatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEstatusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkEstatusActionPerformed
+
+    private void tBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBusquedaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tBusquedaActionPerformed
+
+    private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
+        // TODO add your handling code here:
+        this.tDatos.setModel(mdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+    }//GEN-LAST:event_bBuscarActionPerformed
+
+    private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
+        // TODO add your handling code here:
+        if(edit) {
+            med=new Medida();
+    med.setIdUnidad(Integer.parseInt(this.tBusqueda.getText()));
+    med.setNombre(this.tNombre.getText());
+    med.setSiglas(this.tSiglas.getText());
+    if(this.chkEstatus.isSelected()){
+            med.setEstatus("A");
+        }else{
+            med.setEstatus("I");
+        }
+        mdao.editarMedida(med);
+        cargar();
+        }else{
+            edit=true;
+            this.tDatos.setModel(mdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+            med = mdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
+            this.tIdMedida.setText(String.valueOf(med.getIdUnidad()));
+            this.tNombre.setText(med.getNombre());
+            this.tSiglas.setText(String.valueOf(med.getSiglas()));            
+            if (med.getEstatus().equals("A")) {
+                this.chkEstatus.setSelected(true);
+            } else {
+                this.chkEstatus.setSelected(false);
+            }
+        }
+        this.bBuscar.setVisible(!edit);
+        this.bEliminar.setVisible(!edit);
+        this.bGuardar.setVisible(!edit);
+    }//GEN-LAST:event_bEditarActionPerformed
+
+    private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
+        // TODO add your handling code here:
+        mdao.eliminarMedida(Integer.parseInt(this.tBusqueda.getText()));
+        cargar();
+    }//GEN-LAST:event_bEliminarActionPerformed
 
 //    public void setMensajes(String msj) {
 //        lMensajes.setText(msj);
@@ -205,13 +333,18 @@ public class PMedida extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bBuscar;
+    private javax.swing.JButton bEditar;
+    private javax.swing.JButton bEliminar;
+    private javax.swing.JButton bGuardar;
     private javax.swing.JCheckBox chkEstatus;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lMensajes;
+    private javax.swing.JTextField tBusqueda;
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tIdMedida;
     private javax.swing.JTextField tNombre;

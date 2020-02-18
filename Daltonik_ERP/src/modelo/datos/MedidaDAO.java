@@ -50,7 +50,7 @@ public class MedidaDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("where * from UnidadMedida where idUnidad="+id+";");
+            r = cn.consultar("select * from UnidadMedida where idUnidad="+id+";");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -65,6 +65,22 @@ public class MedidaDAO {
             return null;
         }
     }
+    public Medida buscarIdEdicion(int id) {
+        Medida me=new Medida();
+        try {
+            r = cn.consultar("select * from UnidadMedida where idUnidad="+id+";");
+            while (r.next()) {
+                me.setIdUnidad(r.getInt(1));
+                me.setNombre(r.getString(2));
+                me.setSiglas(r.getString(3));
+                me.setEstatus(r.getString(4));
+                
+            }
+            return me;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public void guardarMedida(Medida med) {
         try {
@@ -75,8 +91,8 @@ public class MedidaDAO {
     }
     public void editarMedida(Medida med) {
         try {
-            cn.ejecutar("update UnidadMedida set capacidad="+med.getIdUnidad()+",'"+med.getNombre()
-                    +"','"+med.getSiglas()+"','"+med.getEstatus()+"'"+"where idUnidad="+";");
+            cn.ejecutar("update UnidadMedida set nombre='"+med.getNombre()
+                    +"',Siglas='"+med.getSiglas()+"',estatus='"+med.getEstatus()+"'"+"where idUnidad="+med.getIdUnidad()+";");
         } catch (Exception e) {
         }
     }
