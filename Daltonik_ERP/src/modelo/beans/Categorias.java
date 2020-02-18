@@ -13,12 +13,12 @@ public class Categorias {
 
     private int idCategoria;
     private String nombre;
-    private char estatus;
+    private String estatus;
 
     public Categorias() {
     }
 
-    public Categorias(int idCategorias, String nombre, char estatus) {
+    public Categorias(int idCategorias, String nombre, String estatus) {
         this.idCategoria = idCategorias;
         this.nombre = nombre;
         this.estatus = estatus;
@@ -40,11 +40,13 @@ public class Categorias {
         this.nombre = nombre;
     }
 
-    public char getEstatus() {
+    public String getEstatus() {
         return estatus;
     }
 
-    public void setEstatus(char estatus) {
+    public void setEstatus(String estatus) {
         this.estatus = estatus;
     }
+
+   
 }
