@@ -5,30 +5,32 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JOptionPane;
 
 
 
 
 public class ConnectURL {
     public static Connection usu=null;
-    public ConnectURL() {
-    }
-
+    private static String user; 
+    private static String pwd;
     
-    public static Connection conectar(){
-        String url="jdbc:sqlserver://localhost:1433;databaseName=ERP2020";
-        try {
-            usu=DriverManager.getConnection(url,"sa","123");
-        } catch (SQLException e) {
-            System.out.println("Conexion no establecida ... \n"+e.getMessage());
-        }
-        return usu;
+    public ConnectURL(String usr,String pw){
+            user = usr;
+            pwd = pw;
     }
-    public static Connection conectar(String user,String pwd){
+    private static Connection conectar(){
         String url="jdbc:sqlserver://localhost:1433;databaseName=ERP2020";
         try {
             usu=DriverManager.getConnection(url,user,pwd);
+        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(null,"Conexion no establecida ... \n"+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        return usu;
+    }
+    public static Connection Login(String usr,String pw){
+        String url="jdbc:sqlserver://localhost:1433;databaseName=ERP2020";
+        try {
+            usu=DriverManager.getConnection(url,usr,pw);
         } catch (SQLException e) {
 //            JOptionPane.showMessageDialog(null,"Conexion no establecida ... \n"+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
@@ -46,10 +48,11 @@ public class ConnectURL {
         Statement declara;
         try {
             declara=con.createStatement();
-            ResultSet respuesta=declara.executeQuery(sql);
+            declara.execute(sql);
             desconectar();
         } catch (SQLException e) {
-            System.out.println("Conexion no establecida ... \n"+e.getMessage());
+            System.out.println("Ejecucion fallida\n"
+                    + "Conexion no establecida ... \n"+e.getMessage());
         }
     }
     public ResultSet consultar(String sql){
@@ -60,7 +63,8 @@ public class ConnectURL {
             ResultSet respuesta=declara.executeQuery(sql);
             return respuesta;
         } catch (SQLException e) {
-            System.out.println("Conexion no establecida ... \n"+e.getMessage());
+            System.out.println("Consulta fallida\n"
+                    + "Conexion no establecida ... \n"+e.getMessage());
         }
         return null;
     }

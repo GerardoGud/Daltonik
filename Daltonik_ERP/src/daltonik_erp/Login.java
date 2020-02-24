@@ -111,7 +111,7 @@ public class Login extends javax.swing.JFrame {
         String pswd="notExist";
         String user=this.tUsuario.getText();
         String pwd=String.copyValueOf(tpContrasena.getPassword());
-        boolean b=modelo.datos.ConnectURL.conectar(user, pwd) != null;
+        boolean b=modelo.datos.ConnectURL.Login(user, pwd) != null;
         if(user.equals(FakeUser)&&(pwd.equals(pswd)) || b){
             tUsuario.setBackground(new java.awt.Color(51,255,153));
             tpContrasena.setBackground(new java.awt.Color(51,255,153));

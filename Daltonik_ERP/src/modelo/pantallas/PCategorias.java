@@ -17,17 +17,21 @@ public class PCategorias extends javax.swing.JPanel {
     private CategoriasDAO cdao;
     private Categorias cat;
     private boolean edit;
-
+    private String user; 
+    private String pwd;
     /**
      * Creates new form PCategorias
      */
-    public PCategorias() {
+    public PCategorias(String user, String pwd) {
         initComponents();
-        cdao = new CategoriasDAO();
+        this.user = user;
+        this.pwd = pwd;
+        cdao = new CategoriasDAO(user, pwd);
         cat = new Categorias();
         cargar();
         edit = false;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -251,10 +255,6 @@ public class PCategorias extends javax.swing.JPanel {
     }//GEN-LAST:event_bEliminarActionPerformed
     public void cargar() {
         this.tDatos.setModel(cdao.cargarTabla(tDatos));
-    }
-
-    public void datoTabla() {
-
     }
 
     public void Limpiar() {

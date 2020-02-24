@@ -6,7 +6,6 @@
 package modelo.pantallas;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.table.DefaultTableModel;
 import modelo.beans.Medida;
 import modelo.datos.MedidaDAO;
 
@@ -18,15 +17,15 @@ public class PMedida extends javax.swing.JPanel {
     private MedidaDAO mdao;
     private Medida med;
     private boolean edit;
-          
+    private String user; 
+    private String pwd;
     
-    /**
-     * Creates new form PMedida
-     */
-    public PMedida() {
+    public PMedida(String user, String pwd) {
         initComponents();
+        this.user = user;
+        this.pwd = pwd;
         edit=false;
-        mdao=new MedidaDAO();
+        mdao=new MedidaDAO(user, pwd);
         med=new Medida();
         cargar();
         this.tBusqueda.addKeyListener(new KeyAdapter() {

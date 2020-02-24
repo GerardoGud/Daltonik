@@ -18,14 +18,27 @@ public class PLaboratorios extends javax.swing.JPanel {
     private LaboratoriosDAO ldao;
     private Laboratorios lab;
     private boolean edit;
-    
-    public PLaboratorios() {
+    private String user; 
+    private String pwd;
+    public PLaboratorios(String user, String pwd) {
         initComponents();
-        ldao=new LaboratoriosDAO();
+        this.user = user;
+        this.pwd = pwd;
+        ldao=new LaboratoriosDAO(user, pwd);
         lab=new Laboratorios();
         cargar();
         edit=false;
         this.tBusqueda.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tIdLaboratorio.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char caracter = e.getKeyChar();
                 if (((caracter < '0')

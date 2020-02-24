@@ -18,13 +18,15 @@ public class PEmpaque extends javax.swing.JPanel {
     private EmpaqueDAO edao;
     private Empaque emp;
     private boolean edit;
-    /**
-     * Creates new form PEmpaque
-     */
-    public PEmpaque() {
+    private String user; 
+    private String pwd;
+    
+    public PEmpaque(String user, String pwd) {
         initComponents();
+        this.user = user;
+        this.pwd = pwd;
         edit=false;
-        edao=new EmpaqueDAO();
+        edao=new EmpaqueDAO(user, pwd);
         emp=new Empaque();
         cargar();
         this.tBusqueda.addKeyListener(new KeyAdapter() {

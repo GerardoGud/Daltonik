@@ -5,7 +5,7 @@
  */
 package modelo.datos;
 
-import java.sql.CallableStatement;
+
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JTable;
@@ -16,12 +16,15 @@ import modelo.beans.Empaque;
  * @author LuisCerv
  */
 public class EmpaqueDAO {
-    CallableStatement cts;
     static ResultSet r;
     ConnectURL cn;
-
-    public EmpaqueDAO() {
-        cn=new ConnectURL();
+    private final String user; 
+    private final String pwd;
+    
+    public EmpaqueDAO(String user, String pwd) {
+        this.user = user;
+        this.pwd = pwd;
+        cn = new ConnectURL(user, pwd);
     }
     
     public DefaultTableModel cargarTabla(JTable tDatos) {

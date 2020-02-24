@@ -11,21 +11,22 @@ import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.Categorias;
-import modelo.beans.Empaque;
-import modelo.beans.Laboratorios;
 
 /**
  *
  * @author FranciscoFigueroa
  */
 public class CategoriasDAO {
-
     CallableStatement cts;
     static ResultSet r;
     ConnectURL cn;
-
-    public CategoriasDAO() {
-        cn = new ConnectURL();
+    private final String user; 
+    private final String pwd;
+    
+    public CategoriasDAO(String user, String pwd) {
+        this.user = user;
+        this.pwd = pwd;
+        cn = new ConnectURL(user, pwd);
     }
 
     public DefaultTableModel cargarTabla(JTable tDatos) {

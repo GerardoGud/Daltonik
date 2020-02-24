@@ -12,18 +12,12 @@ import modelo.datos.ConnectURL;
  * @author LuisCerv
  */
 public class Daltonik_ERP {
-
+    static ConnectURL cn = new ConnectURL("sa", "123");
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args){
-        // TODO code application logic here
-//        ConnectURL.conectar();
-//        ConnectURL.desconectar();
-        
         Login lg= new Login();
         lg.setVisible(true);
-//    }
-    
     }
 }

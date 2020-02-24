@@ -10,38 +10,37 @@ import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import modelo.beans.Medida;
-import static modelo.datos.EmpaqueDAO.r;
+import modelo.beans.Usuario;
 
 /**
  *
- * @author Nadia Cross
+ * @author LuisCerv
  */
-public class MedidaDAO {
-    
+public class UsuarioDAO {
     CallableStatement cts;
     static ResultSet r;
     ConnectURL cn;
     private final String user; 
     private final String pwd;
     
-    public MedidaDAO(String user, String pwd) {
+    public UsuarioDAO(String user, String pwd) {
         this.user = user;
         this.pwd = pwd;
         cn = new ConnectURL(user, pwd);
     }
-    
+
     public DefaultTableModel cargarTabla(JTable tDatos) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from UnidadMedida");
+            r = cn.consultar("select * from Usuarios");
             while (r.next()) {
                 Vector dato = new Vector();
-                dato.add(r.getInt(1));
+                dato.add(r.getString(1));
                 dato.add(r.getString(2));
                 dato.add(r.getString(3));
-                dato.add(r.getString(4));
+                dato.add(r.getInt(4));
+                dato.add(r.getInt(5));
                 tabla.addRow(dato);
                 tDatos.setModel(tabla);
             }
@@ -54,57 +53,65 @@ public class MedidaDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from UnidadMedida where idUnidad="+id+";");
+            r = cn.consultar("select * from Usuarios where idEmpleado=" + id + ";");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
                 dato.add(r.getString(2));
                 dato.add(r.getString(3));
-                dato.add(r.getString(4));
+                dato.add(r.getInt(4));
+                dato.add(r.getInt(5));
                 tabla.addRow(dato);
                 tDatos.setModel(tabla);
             }
             return tabla;//jTable---jdatos
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return null;
         }
     }
-    public Medida buscarIdEdicion(int id) {
-        Medida me=new Medida();
+public Usuario buscarIdEdicion(int id) {
+        Usuario u=new Usuario();
         try {
-            r = cn.consultar("select * from UnidadMedida where idUnidad="+id+";");
+            r = cn.consultar("select * from Usuarios where idEmpleado="+id+";");
             while (r.next()) {
-                me.setIdUnidad(r.getInt(1));
-                me.setNombre(r.getString(2));
-                me.setSiglas(r.getString(3));
-                me.setEstatus(r.getString(4));
-                
+                u.setNombre(r.getString(1));
+                u.setContrasena(r.getString(2));
+                u.setEstatus(r.getString(3));
+                u.setIdEmpleado(r.getInt(4));
+                u.setIdTipoUsuario(r.getInt(5));
             }
-            return me;//jTable---jdatos
+            return u;//jTable---jdatos
         } catch (Exception e) {
             return null;
         }
     }
 
-    public void guardarMedida(Medida med) {
+    public void guardarUsuario(Usuario u) {
         try {
-            cn.ejecutar("INSERT INTO UnidadMedida VALUES ("+med.getIdUnidad()+",'"+med.getNombre()
-                    +"','"+med.getSiglas()+"','"+med.getEstatus()+"'"+");");
+            cn.ejecutar("CREATE LOGIN "+u.getNombre()+" WITH PASSWORD = '"+u.getContrasena()+"'\n" +
+            "CREATE USER "+u.getNombre()+" FOR LOGIN "+u.getNombre()+" ;  \n" +
+            "alter server role sysadmin add member "+u.getNombre()+";\n");
+            cn.ejecutar("INSERT INTO Usuarios VALUES ('" + u.getNombre() + "','" + u.getContrasena()
+                    + "','" + u.getEstatus()+ "'," + u.getIdEmpleado()+ "," + u.getIdTipoUsuario() + ");");
+            
         } catch (Exception e) {
         }
     }
-    public void editarMedida(Medida med) {
+
+    public void editarUsuario(Usuario u, int id) {
         try {
-            cn.ejecutar("update UnidadMedida set nombre='"+med.getNombre()
-                    +"',Siglas='"+med.getSiglas()+"',estatus='"+med.getEstatus()+"'"+"where idUnidad="+med.getIdUnidad()+";");
+            cn.ejecutar("update Usuarios set  nombre='" + u.getNombre()
+                    + "',estatus='" + u.getEstatus() + "',IdTipoUsuario='" + u.getIdTipoUsuario()
+                     + "',contrasenia='" + u.getContrasena() + "' where idEmpleado=" + id + ";");
         } catch (Exception e) {
         }
     }
-    public void eliminarMedida(int id){
+
+    public void eliminarUsuario(int id) {
         try {
-            cn.ejecutar("update UnidadMedida set estatus='I' where idUnidad="+id+";");
+            cn.ejecutar("update Usuarios set estatus='I' where idEmpleado=" + id + ";");
         } catch (Exception e) {
         }
     }
 }
-    
