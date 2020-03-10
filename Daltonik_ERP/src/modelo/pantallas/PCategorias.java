@@ -5,6 +5,8 @@
  */
 package modelo.pantallas;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import modelo.datos.CategoriasDAO;
 import modelo.beans.Categorias;
 
@@ -30,6 +32,36 @@ public class PCategorias extends javax.swing.JPanel {
         cat = new Categorias();
         cargar();
         edit = false;
+        this.tBusqueda.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tCategoria.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tNombre.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)&& (caracter != '.')) {
+                    e.consume();
+                }
+            }
+        });
     }
     
 
@@ -205,6 +237,7 @@ public class PCategorias extends javax.swing.JPanel {
         }
         cdao.guardarCategorias(cat);
         cargar();
+        Limpiar();
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void tNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNombreActionPerformed
@@ -214,6 +247,7 @@ public class PCategorias extends javax.swing.JPanel {
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
         // TODO add your handling code here:
         this.tDatos.setModel(cdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+        Limpiar();
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
@@ -230,6 +264,7 @@ public class PCategorias extends javax.swing.JPanel {
             }
             cdao.editarCategorias(cat, cat.getIdCategoria());
             cargar();
+            Limpiar();
         } else {
             edit = true;
             this.tDatos.setModel(cdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
