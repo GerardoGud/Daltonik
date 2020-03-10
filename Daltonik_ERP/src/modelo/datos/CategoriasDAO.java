@@ -7,10 +7,12 @@ package modelo.datos;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.Categorias;
+import static modelo.datos.EmpaqueDAO.r;
 
 /**
  *
@@ -29,11 +31,11 @@ public class CategoriasDAO {
         cn = new ConnectURL(user, pwd);
     }
 
-    public DefaultTableModel cargarTabla(JTable tDatos) {
+    public DefaultTableModel cargarTabla(JTable tDatos, int reg) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from Categorias");
+            r = cn.consultar("select * from Categorias where estatus='A' order by idCategoria offset ("+reg+"*5) rows fetch next 5 rows only");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -46,6 +48,24 @@ public class CategoriasDAO {
         } catch (Exception e) {
             return null;
         }
+    }
+    public int cantPaginas(){
+        int p=0,s=0;
+        try {
+            r = cn.consultar("Select count(*) from Categorias where estatus='A'");
+            while (r.next()) {
+                p=r.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        if(p%5==0){
+            s=(int)p/5;
+            s--;
+        }else{
+            s=(int)p/5;
+        }
+        return s;
     }
     public DefaultTableModel buscarId(JTable tDatos, int id) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
