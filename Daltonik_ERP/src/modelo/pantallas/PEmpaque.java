@@ -331,9 +331,10 @@ public class PEmpaque extends javax.swing.JPanel {
             emp.setEstatus("I");
         }
         edao.guardarEmpaque(emp);
+        noPaginas=edao.cantPaginas();
         cargar();
-        limpiar();
         paginar();
+        limpiar();
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void tCapacidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCapacidadActionPerformed
@@ -343,7 +344,9 @@ public class PEmpaque extends javax.swing.JPanel {
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
         edao.eliminarEmpaque(Integer.parseInt(this.tBusqueda.getText()));
+        noPaginas=edao.cantPaginas();
         cargar();
+        paginar();
         limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
@@ -368,7 +371,9 @@ public class PEmpaque extends javax.swing.JPanel {
                 emp.setEstatus("I");
             }
             edao.editarEmpaque(emp, emp.getIdEmpaque());
-            cargar();
+            noPaginas=edao.cantPaginas();
+        cargar();
+        paginar();
             limpiar();
         }else{
             edit=true;
