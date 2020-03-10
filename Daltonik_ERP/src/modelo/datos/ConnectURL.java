@@ -14,27 +14,29 @@ public class ConnectURL {
     private static String user; 
     private static String pwd;
     
+    public ConnectURL(){
+    }
     public ConnectURL(String usr,String pw){
             user = usr;
             pwd = pw;
     }
+    
     private static Connection conectar(){
         String url="jdbc:sqlserver://localhost:1433;databaseName=ERP2020";
         try {
             usu=DriverManager.getConnection(url,user,pwd);
-        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null,"Conexion no establecida ... \n"+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-        }
+        } catch (SQLException e) {}
         return usu;
     }
-    public static Connection Login(String usr,String pw){
+    public static boolean Login(String usr,String pw){
+        Connection s;
         String url="jdbc:sqlserver://localhost:1433;databaseName=ERP2020";
         try {
-            usu=DriverManager.getConnection(url,usr,pw);
+            s=DriverManager.getConnection(url,usr,pw);
         } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null,"Conexion no establecida ... \n"+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            s=null;
         }
-        return usu;
+        return s!=null;
     }
     public void desconectar(){
         try {
@@ -51,8 +53,7 @@ public class ConnectURL {
             declara.execute(sql);
             desconectar();
         } catch (SQLException e) {
-            System.out.println("Ejecucion fallida\n"
-                    + "Conexion no establecida ... \n"+e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
     public ResultSet consultar(String sql){
@@ -63,8 +64,7 @@ public class ConnectURL {
             ResultSet respuesta=declara.executeQuery(sql);
             return respuesta;
         } catch (SQLException e) {
-            System.out.println("Consulta fallida\n"
-                    + "Conexion no establecida ... \n"+e.getMessage());
+            System.out.println(e.getMessage());
         }
         return null;
     }

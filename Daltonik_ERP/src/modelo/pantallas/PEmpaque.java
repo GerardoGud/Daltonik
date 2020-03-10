@@ -20,6 +20,8 @@ public class PEmpaque extends javax.swing.JPanel {
     private boolean edit;
     private String user; 
     private String pwd;
+    private int pagina=0;
+    private int noPaginas=0;
     
     public PEmpaque(String user, String pwd) {
         initComponents();
@@ -28,8 +30,20 @@ public class PEmpaque extends javax.swing.JPanel {
         edit=false;
         edao=new EmpaqueDAO(user, pwd);
         emp=new Empaque();
+        noPaginas=edao.cantPaginas();
         cargar();
+        paginar();
         this.tBusqueda.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tIdEmpaque.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char caracter = e.getKeyChar();
                 if (((caracter < '0')
@@ -88,6 +102,9 @@ public class PEmpaque extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         tIdEmpaque = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        tNumPage = new javax.swing.JLabel();
+        bSiguiente = new javax.swing.JButton();
+        bAtras = new javax.swing.JButton();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -179,6 +196,22 @@ public class PEmpaque extends javax.swing.JPanel {
 
         jLabel6.setText("idEmpaque");
 
+        tNumPage.setText("0");
+
+        bSiguiente.setText("Siguiente");
+        bSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSiguienteActionPerformed(evt);
+            }
+        });
+
+        bAtras.setText("Atras");
+        bAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAtrasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -223,6 +256,14 @@ public class PEmpaque extends javax.swing.JPanel {
                                                 .addComponent(bBuscar))))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNumPage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bSiguiente)
+                .addGap(180, 180, 180))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,7 +302,12 @@ public class PEmpaque extends javax.swing.JPanel {
                         .addComponent(bGuardar)
                         .addGap(33, 33, 33)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tNumPage)
+                            .addComponent(bSiguiente)
+                            .addComponent(bAtras))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(chkEstatus)
@@ -345,8 +391,22 @@ public class PEmpaque extends javax.swing.JPanel {
     private void tIdEmpaqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdEmpaqueActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tIdEmpaqueActionPerformed
+
+    private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
+        // TODO add your handling code here:
+        if(pagina<noPaginas)pagina++;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bSiguienteActionPerformed
+
+    private void bAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAtrasActionPerformed
+        // TODO add your handling code here:
+        if(pagina>0)pagina--;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bAtrasActionPerformed
     public void cargar() {
-        this.tDatos.setModel(edao.cargarTabla(tDatos));
+        this.tDatos.setModel(edao.cargarTabla(tDatos,pagina));
     }
     public void limpiar(){
         this.tCapacidad.setText("");
@@ -355,12 +415,27 @@ public class PEmpaque extends javax.swing.JPanel {
         this.tUnidad.setText("");
     }
     
+    public void paginar(){
+        if(pagina==0){
+            this.bAtras.setVisible(false);
+        }else{
+            this.bAtras.setVisible(true);
+        }
+        if(pagina<noPaginas){
+            this.bSiguiente.setVisible(true);
+        }else{
+            this.bSiguiente.setVisible(false);
+        }
+        this.tNumPage.setText((pagina+1)+" de "+(noPaginas+1));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAtras;
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bEditar;
     private javax.swing.JButton bEliminar;
     private javax.swing.JButton bGuardar;
+    private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -374,6 +449,7 @@ public class PEmpaque extends javax.swing.JPanel {
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tIdEmpaque;
     private javax.swing.JTextField tNombre;
+    private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tUnidad;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -33,6 +34,8 @@ public class Principal extends javax.swing.JFrame{
     
     public Principal(String user, String pwd) {
         initComponents();
+        this.setIconImage(new ImageIcon(getClass().getResource("/iconos/dk.png")).getImage());
+        this.setTitle("Daltonik ERP");
         this.user = user;
         this.pwd = pwd;
         this.lUsuario.setText("Sesion activa: "+user);
@@ -86,7 +89,7 @@ public class Principal extends javax.swing.JFrame{
                 + "si tiene algun avance este podria perderse!","Cerrar sesion :"+user,
                 JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
         if(op==JOptionPane.YES_OPTION){
-            Login lg= new Login();
+            Login lg= new Login(1);
             lg.setVisible(true);
             this.dispose();
         }
@@ -126,6 +129,7 @@ public class Principal extends javax.swing.JFrame{
         mMedidas = new javax.swing.JMenuItem();
         mEmpaques = new javax.swing.JMenuItem();
         mLaboratorios = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jButton1.setText("jButton1");
 
@@ -216,6 +220,14 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         jMenu2.add(mLaboratorios);
+
+        jMenuItem1.setText("Muestra");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
 
         jMenuBar1.add(jMenu2);
 
@@ -326,8 +338,14 @@ public class Principal extends javax.swing.JFrame{
 
     private void mUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mUsuActionPerformed
         PUsuario pu=new PUsuario (user,pwd);
-        this.Pantallas.add("Empaques",pu);
+        this.Pantallas.add("Usuarios",pu);
     }//GEN-LAST:event_mUsuActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        PanelMuestra pm=new PanelMuestra (user,pwd);
+        this.Pantallas.add("Panel muestra",pm);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -373,6 +391,7 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lHyF;
     private javax.swing.JLabel lUsuario;
     private javax.swing.JMenuItem mCategorias;

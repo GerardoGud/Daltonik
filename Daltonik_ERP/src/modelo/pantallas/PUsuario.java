@@ -22,6 +22,8 @@ public class PUsuario extends javax.swing.JPanel {
     private boolean edit;
     private final String user; 
     private final String pwd;
+    private int pagina=0;
+    private int noPaginas=0;
     /**
      * Creates new form PCategorias
      * @param user
@@ -33,7 +35,9 @@ public class PUsuario extends javax.swing.JPanel {
         this.pwd = pwd;
         udao = new UsuarioDAO(user, pwd);
         u = new Usuario();
+        noPaginas=udao.cantPaginas();
         cargar();
+        paginar();
         edit = false;
     }
 
@@ -62,6 +66,9 @@ public class PUsuario extends javax.swing.JPanel {
         tContrasena = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        tNumPage = new javax.swing.JLabel();
+        bSiguiente = new javax.swing.JButton();
+        bAtras = new javax.swing.JButton();
 
         tDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -134,6 +141,22 @@ public class PUsuario extends javax.swing.JPanel {
 
         jLabel4.setText("Contrasena");
 
+        tNumPage.setText("0");
+
+        bSiguiente.setText("Siguiente");
+        bSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSiguienteActionPerformed(evt);
+            }
+        });
+
+        bAtras.setText("Atras");
+        bAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAtrasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -173,6 +196,14 @@ public class PUsuario extends javax.swing.JPanel {
                         .addContainerGap()
                         .addComponent(jScrollPane1)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(bAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNumPage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bSiguiente)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,8 +240,13 @@ public class PUsuario extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(chkEstatus)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tNumPage)
+                    .addComponent(bSiguiente)
+                    .addComponent(bAtras))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -283,10 +319,38 @@ public class PUsuario extends javax.swing.JPanel {
     private void tContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tContrasenaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tContrasenaActionPerformed
-public void cargar() {
-        this.tDatos.setModel(udao.cargarTabla(tDatos));
-    }
 
+    private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
+        // TODO add your handling code here:
+        if(pagina<noPaginas)pagina++;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bSiguienteActionPerformed
+
+    private void bAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAtrasActionPerformed
+        // TODO add your handling code here:
+        if(pagina>0)pagina--;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bAtrasActionPerformed
+    public void cargar() {
+        this.tDatos.setModel(udao.cargarTabla(tDatos,pagina));
+    }
+    
+    public void paginar(){
+        if(pagina==0){
+            this.bAtras.setVisible(false);
+        }else{
+            this.bAtras.setVisible(true);
+        }
+        if(pagina<noPaginas){
+            this.bSiguiente.setVisible(true);
+        }else{
+            this.bSiguiente.setVisible(false);
+        }
+        this.tNumPage.setText((pagina+1)+" de "+(noPaginas+1));
+    }
+    
     public void Limpiar() {
         this.tNombre.setText("");
             this.tContrasena.setText("");
@@ -294,10 +358,12 @@ public void cargar() {
             this.tIdEmpleado.setText("");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAtras;
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bEditar;
     private javax.swing.JButton bEliminar;
     private javax.swing.JButton bGuardar;
+    private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -309,6 +375,7 @@ public void cargar() {
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tIdEmpleado;
     private javax.swing.JTextField tNombre;
+    private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tidTipoUsuario;
     // End of variables declaration//GEN-END:variables
 }
