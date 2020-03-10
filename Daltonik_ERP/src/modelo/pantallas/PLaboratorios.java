@@ -294,8 +294,8 @@ public class PLaboratorios extends javax.swing.JPanel {
     }//GEN-LAST:event_bEditarActionPerformed
 
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
-        // TODO add your handling code here:
-        
+       ldao.eliminarLaboratorio(Integer.parseInt(this.tBusqueda.getText()));
+       this.tDatos.setModel(ldao.cargarTabla(tDatos));
     }//GEN-LAST:event_bEliminarActionPerformed
     public void cargar() {
         this.tDatos.setModel(ldao.cargarTabla(tDatos));

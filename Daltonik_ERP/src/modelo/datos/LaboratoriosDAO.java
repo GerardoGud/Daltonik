@@ -31,7 +31,7 @@ public class LaboratoriosDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from Laboratorios");
+            r = cn.consultar("select * from Laboratorios where estatus = 'A'");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
