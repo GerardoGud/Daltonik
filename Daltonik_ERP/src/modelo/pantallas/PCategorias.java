@@ -331,7 +331,9 @@ public class PCategorias extends javax.swing.JPanel {
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
         cdao.eliminarCategorias(Integer.parseInt(this.tBusqueda.getText()));
-        cargar();
+        this.tDatos.setModel(cdao.cargarTabla(tDatos, pagina));
+        noPaginas=cdao.cantPaginas();
+        paginar();
         Limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
