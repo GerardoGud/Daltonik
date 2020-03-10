@@ -7,6 +7,7 @@ package modelo.pantallas;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 import modelo.datos.LaboratoriosDAO;
 import modelo.beans.Laboratorios;
 
@@ -132,6 +133,12 @@ public class PLaboratorios extends javax.swing.JPanel {
             }
         });
 
+        tBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tBusquedaKeyTyped(evt);
+            }
+        });
+
         bBuscar.setText("Buscar");
         bBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,6 +161,17 @@ public class PLaboratorios extends javax.swing.JPanel {
         });
 
         jLabel2.setText("IdLaboratorio");
+
+        tIdLaboratorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tIdLaboratorioActionPerformed(evt);
+            }
+        });
+        tIdLaboratorio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tIdLaboratorioKeyTyped(evt);
+            }
+        });
 
         jLabel4.setText("IdLaboratorio");
 
@@ -297,6 +315,30 @@ public class PLaboratorios extends javax.swing.JPanel {
        ldao.eliminarLaboratorio(Integer.parseInt(this.tBusqueda.getText()));
        this.tDatos.setModel(ldao.cargarTabla(tDatos));
     }//GEN-LAST:event_bEliminarActionPerformed
+
+    private void tIdLaboratorioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tIdLaboratorioKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tNombre, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tIdLaboratorioKeyTyped
+
+    private void tBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tBusquedaKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tNombre, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tBusquedaKeyTyped
+
+    private void tIdLaboratorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdLaboratorioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tIdLaboratorioActionPerformed
     public void cargar() {
         this.tDatos.setModel(ldao.cargarTabla(tDatos));
     }
