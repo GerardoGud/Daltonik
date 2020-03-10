@@ -301,6 +301,7 @@ public class PLaboratorios extends javax.swing.JPanel {
             lab.setEstatus("I");
         }
         ldao.guardarLaboratorio(lab);
+        noPaginas=ldao.cantPaginas();
         cargar();
         paginar();
         limpiar();
