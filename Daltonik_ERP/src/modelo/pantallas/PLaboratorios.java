@@ -353,6 +353,9 @@ public class PLaboratorios extends javax.swing.JPanel {
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
        ldao.eliminarLaboratorio(Integer.parseInt(this.tBusqueda.getText()));
        this.tDatos.setModel(ldao.cargarTabla(tDatos, pagina));
+       noPaginas=ldao.cantPaginas();
+        paginar();
+        limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
     private void tIdLaboratorioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tIdLaboratorioKeyTyped
