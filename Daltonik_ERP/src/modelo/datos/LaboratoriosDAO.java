@@ -26,12 +26,29 @@ public class LaboratoriosDAO {
         this.pwd = pwd;
         cn = new ConnectURL(user, pwd);
     }
-    
-    public DefaultTableModel cargarTabla(JTable tDatos) {
+    public int cantPaginas(){
+        int p=0,s=0;
+        try {
+            r = cn.consultar("Select count(*) from Laboratorios");
+            while (r.next()) {
+                p=r.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        if(p%5==0){
+            s=(int)p/5;
+            s--;
+        }else{
+            s=(int)p/5;
+        }
+        return s;
+    }
+    public DefaultTableModel cargarTabla(JTable tDatos, int reg) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from Laboratorios where estatus = 'A'");
+            r = cn.consultar("select * from Laboratorios where estatus = 'A' order by idLaboratorio offset ("+reg+"*5) rows fetch next 5 rows only");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
