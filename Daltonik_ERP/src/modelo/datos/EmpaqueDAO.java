@@ -32,7 +32,7 @@ public class EmpaqueDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from Empaques order by idEmpaque offset ("+reg+"*5) rows fetch next 5 rows only");
+            r = cn.consultar("select * from Empaques where estatus='A' order by idEmpaque offset ("+reg+"*5) rows fetch next 5 rows only");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -51,7 +51,7 @@ public class EmpaqueDAO {
     public int cantPaginas(){
         int p=0,s=0;
         try {
-            r = cn.consultar("Select count(*) from Empaques");
+            r = cn.consultar("Select count(*) from Empaques where estatus='A'");
             while (r.next()) {
                 p=r.getInt(1);
             }
