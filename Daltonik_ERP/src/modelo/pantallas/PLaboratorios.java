@@ -21,13 +21,18 @@ public class PLaboratorios extends javax.swing.JPanel {
     private boolean edit;
     private String user; 
     private String pwd;
+    private int pagina=0;
+    private int noPaginas=0;
+    
     public PLaboratorios(String user, String pwd) {
         initComponents();
         this.user = user;
         this.pwd = pwd;
         ldao=new LaboratoriosDAO(user, pwd);
         lab=new Laboratorios();
+        noPaginas=ldao.cantPaginas();
         cargar();
+        paginar();
         edit=false;
         this.tBusqueda.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -77,6 +82,9 @@ public class PLaboratorios extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         tIdLaboratorio = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        bAtras = new javax.swing.JButton();
+        tNumPage = new javax.swing.JLabel();
+        bSiguiente = new javax.swing.JButton();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -175,6 +183,22 @@ public class PLaboratorios extends javax.swing.JPanel {
 
         jLabel4.setText("IdLaboratorio");
 
+        bAtras.setText("Atras");
+        bAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAtrasActionPerformed(evt);
+            }
+        });
+
+        tNumPage.setText("0");
+
+        bSiguiente.setText("Siguiente");
+        bSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSiguienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -216,6 +240,14 @@ public class PLaboratorios extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNumPage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bSiguiente)
+                .addGap(188, 188, 188))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,7 +276,12 @@ public class PLaboratorios extends javax.swing.JPanel {
                 .addComponent(bGuardar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tNumPage)
+                    .addComponent(bSiguiente)
+                    .addComponent(bAtras))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -265,6 +302,7 @@ public class PLaboratorios extends javax.swing.JPanel {
         }
         ldao.guardarLaboratorio(lab);
         cargar();
+        paginar();
         limpiar();
     }//GEN-LAST:event_bGuardarActionPerformed
 
@@ -313,7 +351,7 @@ public class PLaboratorios extends javax.swing.JPanel {
 
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
        ldao.eliminarLaboratorio(Integer.parseInt(this.tBusqueda.getText()));
-       this.tDatos.setModel(ldao.cargarTabla(tDatos));
+       this.tDatos.setModel(ldao.cargarTabla(tDatos, pagina));
     }//GEN-LAST:event_bEliminarActionPerformed
 
     private void tIdLaboratorioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tIdLaboratorioKeyTyped
@@ -339,23 +377,54 @@ public class PLaboratorios extends javax.swing.JPanel {
     private void tIdLaboratorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tIdLaboratorioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tIdLaboratorioActionPerformed
+
+    private void bAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAtrasActionPerformed
+        // TODO add your handling code here:
+        if(pagina>0)pagina--;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bAtrasActionPerformed
+
+    private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
+        // TODO add your handling code here:
+        if(pagina<noPaginas)pagina++;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bSiguienteActionPerformed
     public void cargar() {
-        this.tDatos.setModel(ldao.cargarTabla(tDatos));
+        this.tDatos.setModel(ldao.cargarTabla(tDatos, pagina));
     }
     public void limpiar(){
         this.tOrigen.setText("");
         this.tNombre.setText("");
         this.tIdLaboratorio.setText("");
     }
+    
+    public void paginar(){
+        if(pagina==0){
+            this.bAtras.setVisible(false);
+        }else{
+            this.bAtras.setVisible(true);
+        }
+        if(pagina<noPaginas){
+            this.bSiguiente.setVisible(true);
+        }else{
+            this.bSiguiente.setVisible(false);
+        }
+        this.tNumPage.setText((pagina+1)+" de "+(noPaginas+1));
+    }
+
     public void datoTabla(){
         
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAtras;
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bEditar;
     private javax.swing.JButton bEliminar;
     private javax.swing.JButton bGuardar;
+    private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -367,6 +436,7 @@ public class PLaboratorios extends javax.swing.JPanel {
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tIdLaboratorio;
     private javax.swing.JTextField tNombre;
+    private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tOrigen;
     // End of variables declaration//GEN-END:variables
 }
