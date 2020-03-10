@@ -333,7 +333,7 @@ public class PEmpaque extends javax.swing.JPanel {
         edao.guardarEmpaque(emp);
         cargar();
         limpiar();
-        
+        paginar();
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void tCapacidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCapacidadActionPerformed
