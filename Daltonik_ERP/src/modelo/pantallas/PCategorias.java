@@ -7,6 +7,7 @@ package modelo.pantallas;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 import modelo.datos.CategoriasDAO;
 import modelo.beans.Categorias;
 
@@ -85,6 +86,17 @@ public class PCategorias extends javax.swing.JPanel {
         bSiguiente = new javax.swing.JButton();
         bAtras = new javax.swing.JButton();
 
+        tCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tCategoriaActionPerformed(evt);
+            }
+        });
+        tCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tCategoriaKeyTyped(evt);
+            }
+        });
+
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         tNombre.addActionListener(new java.awt.event.ActionListener() {
@@ -152,6 +164,12 @@ public class PCategorias extends javax.swing.JPanel {
         bEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bEliminarActionPerformed(evt);
+            }
+        });
+
+        tBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tBusquedaKeyTyped(evt);
             }
         });
 
@@ -317,6 +335,7 @@ public class PCategorias extends javax.swing.JPanel {
         Limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
+            
     private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
         // TODO add your handling code here:
         if(pagina<noPaginas)pagina++;
@@ -330,6 +349,32 @@ public class PCategorias extends javax.swing.JPanel {
         paginar();
         cargar();
     }//GEN-LAST:event_bAtrasActionPerformed
+
+    private void tCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tCategoriaActionPerformed
+
+    private void tCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCategoriaKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tCategoria, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tCategoriaKeyTyped
+
+    private void tBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tBusquedaKeyTyped
+        // TODO add your handling code here:
+         char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tBusqueda, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tBusquedaKeyTyped
     public void cargar() {
         this.tDatos.setModel(cdao.cargarTabla(tDatos,pagina));
     }
@@ -337,6 +382,7 @@ public class PCategorias extends javax.swing.JPanel {
     public void Limpiar() {
         this.tCategoria.setText("");
         this.tNombre.setText("");
+        this.tBusqueda.setText("");
     }
     
     public void paginar(){
