@@ -22,20 +22,16 @@ public class MedidaDAO {
     CallableStatement cts;
     static ResultSet r;
     ConnectURL cn;
-    private final String user; 
-    private final String pwd;
-    
-    public MedidaDAO(String user, String pwd) {
-        this.user = user;
-        this.pwd = pwd;
-        cn = new ConnectURL(user, pwd);
+
+    public MedidaDAO() {
+       cn=new ConnectURL();
     }
     
     public DefaultTableModel cargarTabla(JTable tDatos) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from UnidadMedida");
+            r = cn.consultar("select * from UnidadMedida while estatus='A'");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -107,4 +103,4 @@ public class MedidaDAO {
         }
     }
 }
-    
+ //   

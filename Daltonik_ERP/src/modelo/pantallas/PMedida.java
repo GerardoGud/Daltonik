@@ -6,6 +6,7 @@
 package modelo.pantallas;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.table.DefaultTableModel;
 import modelo.beans.Medida;
 import modelo.datos.MedidaDAO;
 
@@ -17,15 +18,15 @@ public class PMedida extends javax.swing.JPanel {
     private MedidaDAO mdao;
     private Medida med;
     private boolean edit;
-    private String user; 
-    private String pwd;
+          
     
-    public PMedida(String user, String pwd) {
+    /**
+     * Creates new form PMedida
+     */
+    public PMedida() {
         initComponents();
-        this.user = user;
-        this.pwd = pwd;
         edit=false;
-        mdao=new MedidaDAO(user, pwd);
+        mdao=new MedidaDAO();
         med=new Medida();
         cargar();
         this.tBusqueda.addKeyListener(new KeyAdapter() {
@@ -320,8 +321,10 @@ public class PMedida extends javax.swing.JPanel {
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
         mdao.eliminarMedida(Integer.parseInt(this.tBusqueda.getText()));
-        cargar();
-        limpiar();
+        this.tDatos.setModel(mdao.cargarTabla(tDatos));
+
+//        cargar();
+//        limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
 //    public void setMensajes(String msj) {
