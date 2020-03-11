@@ -16,20 +16,29 @@ import modelo.datos.ExistenciasDAO;
  * @author Nadia Cross
  */
 public class PExistencias extends javax.swing.JPanel {
-    private ExistenciasSucursal exist;
     private ExistenciasDAO exdao;
+    private ExistenciasSucursal exist;
     private boolean edit;
+    private final String user; 
+    private final String pwd;
+    private int pagina=0;
+    private int noPaginas=0;
     
     
             /**
      * Creates new form PExistencias
      */
-    public PExistencias() {
+    public PExistencias(String user, String pwd) {
         initComponents();
+        this.user = user;
+        this.pwd = pwd;
         edit=false;
-        exdao=new ExistenciasDAO();
+        exdao=new ExistenciasDAO(user, pwd);
         exist=new ExistenciasSucursal();
+        noPaginas=exdao.cantPaginas();
         cargar();
+        paginar();
+        
         this.tBusqueda.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char caracter = e.getKeyChar();
@@ -60,8 +69,18 @@ public class PExistencias extends javax.swing.JPanel {
                 }
             }
         });
+        this.tCant.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -85,7 +104,9 @@ public class PExistencias extends javax.swing.JPanel {
         tBusqueda = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tDatos = new javax.swing.JTable();
-        chkEstatus = new javax.swing.JCheckBox();
+        tNumPage = new javax.swing.JLabel();
+        bSiguiente = new javax.swing.JButton();
+        bAtras = new javax.swing.JButton();
 
         jLabel1.setText("idPresentaciones");
 
@@ -149,8 +170,27 @@ public class PExistencias extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tDatos);
+        if (tDatos.getColumnModel().getColumnCount() > 0) {
+            tDatos.getColumnModel().getColumn(0).setResizable(false);
+            tDatos.getColumnModel().getColumn(1).setResizable(false);
+            tDatos.getColumnModel().getColumn(2).setResizable(false);
+        }
 
-        chkEstatus.setText("Activar");
+        tNumPage.setText("0");
+
+        bSiguiente.setText("Siguiente");
+        bSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSiguienteActionPerformed(evt);
+            }
+        });
+
+        bAtras.setText("Atras");
+        bAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAtrasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -172,9 +212,7 @@ public class PExistencias extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(chkEstatus)
-                                    .addComponent(tCant, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(tCant, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(115, 115, 115)
@@ -193,6 +231,14 @@ public class PExistencias extends javax.swing.JPanel {
                                 .addComponent(bEliminar))))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(213, 213, 213)
+                .addComponent(bAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNumPage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bSiguiente)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,10 +271,13 @@ public class PExistencias extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tCant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(chkEstatus)
-                .addGap(18, 18, 18)
+                .addGap(48, 48, 48)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tNumPage)
+                    .addComponent(bSiguiente)
+                    .addComponent(bAtras))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -242,11 +291,11 @@ public class PExistencias extends javax.swing.JPanel {
         exist.setIdPresentacion(Integer.parseInt(this.tIdPresent.getText()));
         exist.setIdSucursal(Integer.parseInt(this.tIdSucursal.getText()));
         exist.setCantidad(this.tCant.getText());
-        if(this.chkEstatus.isSelected()){
-            exist.setEstatus("A");
-        }else{
-            exist.setEstatus("I");
-        }
+//        if(this.chkEstatus.isSelected()){
+//            exist.setEstatus("A");
+//        }else{
+//            exist.setEstatus("I");
+//        }
         exdao.guardarExistecias(exist);
         cargar();
         limpiar();
@@ -266,11 +315,11 @@ public class PExistencias extends javax.swing.JPanel {
             exist.setIdPresentacion(Integer.parseInt(this.tBusqueda.getText()));
             exist.setIdSucursal(Integer.parseInt(this.tBusqueda.getText()));
             exist.setCantidad(this.tCant.getText());
-            if(this.chkEstatus.isSelected()){
-                exist.setEstatus("A");
-            }else{
-                exist.setEstatus("I");
-            }
+//            if(this.chkEstatus.isSelected()){
+//                exist.setEstatus("A");
+//            }else{
+//                exist.setEstatus("I");
+//            }
             exdao.editarExistencias(exist);
             cargar();
             limpiar();
@@ -281,11 +330,11 @@ public class PExistencias extends javax.swing.JPanel {
             this.tIdPresent.setText(String.valueOf(exist.getIdPresentacion()));
             this.tIdSucursal.setText(String.valueOf(exist.getIdSucursal()));
             this.tCant.setText(String.valueOf(exist.getCantidad()));
-            if (exist.getEstatus().equals("A")) {
-                this.chkEstatus.setSelected(true);
-            } else {
-                this.chkEstatus.setSelected(false);
-            }
+//            if (exist.getEstatus().equals("A")) {
+//                this.chkEstatus.setSelected(true);
+//            } else {
+//                this.chkEstatus.setSelected(false);
+//            }
         }
         this.bBuscar.setVisible(!edit);
         this.bEliminar.setVisible(!edit);
@@ -294,12 +343,26 @@ public class PExistencias extends javax.swing.JPanel {
 
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
-        exdao.eliminarExistencias(Integer.parseInt(this.tBusqueda.getText()));
-        cargar();
-        limpiar();
+//        exdao.eliminarExistencias(Integer.parseInt(this.tBusqueda.getText()));
+//        cargar();
+//        limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
+
+    private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
+        // TODO add your handling code here:
+        if(pagina<noPaginas)pagina++;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bSiguienteActionPerformed
+
+    private void bAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAtrasActionPerformed
+        // TODO add your handling code here:
+        if(pagina>0)pagina--;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bAtrasActionPerformed
     public void cargar() {
-        this.tDatos.setModel(exdao.cargarTabla(tDatos));
+        this.tDatos.setModel(exdao.cargarTabla(tDatos, pagina));
     }
     public void limpiar(){
         this.tIdPresent.setText("");
@@ -307,12 +370,26 @@ public class PExistencias extends javax.swing.JPanel {
         this.tCant.setText("");
     }
 
+    public void paginar(){
+        if(pagina==0){
+            this.bAtras.setVisible(false);
+        }else{
+            this.bAtras.setVisible(true);
+        }
+        if(pagina<noPaginas){
+            this.bSiguiente.setVisible(true);
+        }else{
+            this.bSiguiente.setVisible(false);
+        }
+        this.tNumPage.setText((pagina+1)+" de "+(noPaginas+1));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAtras;
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bEditar;
     private javax.swing.JButton bEliminar;
     private javax.swing.JButton bGuardar;
-    private javax.swing.JCheckBox chkEstatus;
+    private javax.swing.JButton bSiguiente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -323,5 +400,6 @@ public class PExistencias extends javax.swing.JPanel {
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tIdPresent;
     private javax.swing.JTextField tIdSucursal;
+    private javax.swing.JLabel tNumPage;
     // End of variables declaration//GEN-END:variables
 }

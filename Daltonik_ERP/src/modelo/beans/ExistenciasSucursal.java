@@ -13,25 +13,25 @@ public class ExistenciasSucursal {
     private int idPresentacion;
     private int idSucursal;
     private String cantidad;
-    private String estatus;
+//    private String estatus;
 
-    public ExistenciasSucursal(int idPresentacion, int idSucursal, String cantidad, String estatus) {
+    public ExistenciasSucursal(int idPresentacion, int idSucursal, String cantidad) {
         this.idPresentacion = idPresentacion;
         this.idSucursal = idSucursal;
         this.cantidad = cantidad;
-        this.estatus = estatus;
+//        this.estatus = estatus;
     }
     
     public ExistenciasSucursal() {
     }
 
-    public String getEstatus() {
-        return estatus;
-    }
-
-    public void setEstatus(String estatus) {
-        this.estatus = estatus;
-    }   
+//    public String getEstatus() {
+//        return estatus;
+//    }
+//
+//    public void setEstatus(String estatus) {
+//        this.estatus = estatus;
+//    }   
     
     public int getIdPresentacion() {
         return idPresentacion;
