@@ -15,6 +15,7 @@ import modelo.datos.ConnectURL;
  *
  * @author LuisCerv
  */
+
 public class Login extends javax.swing.JFrame {
     private int ent =0;
     private String fondo;
@@ -51,19 +52,19 @@ public class Login extends javax.swing.JFrame {
         arc.setArchivoRuta("C:\\Daltonik\\");
         fondo = arc.AbrirFondo();
     }
-    public Login(int ent) {
-        initComponents();
-        cn = null;
-        this.ent=ent;
-        this.tpContrasena.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char caracter = e.getKeyChar();
-                if ((caracter == KeyEvent.VK_ENTER)) {
-                    revisar();
-                }
-            }
-        });
-    }
+//    public Login(int ent) {
+//        initComponents();
+//        cn = null;
+//        this.ent=ent;
+//        this.tpContrasena.addKeyListener(new KeyAdapter() {
+//            public void keyTyped(KeyEvent e) {
+//                char caracter = e.getKeyChar();
+//                if ((caracter == KeyEvent.VK_ENTER)) {
+//                    revisar();
+//                }
+//            }
+//        });
+//    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         revisar();
     }
