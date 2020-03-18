@@ -7,6 +7,7 @@ package modelo.pantallas;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 import modelo.datos.SucursalesDAO;
 import modelo.beans.Sucursales;
 
@@ -20,6 +21,8 @@ public class PSucursales extends javax.swing.JPanel {
     private boolean edit;
     private String user; 
     private String pwd;
+    private int pagina=0;
+    private int noPaginas=0;
     public PSucursales(String user, String pwd) {
         initComponents();
         this.user = user;
@@ -86,12 +89,20 @@ public class PSucursales extends javax.swing.JPanel {
         tIdCiudad = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         tColonia = new javax.swing.JTextField();
+        bAtras = new javax.swing.JButton();
+        tNumPage = new javax.swing.JLabel();
+        bSiguiente = new javax.swing.JButton();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         tTelefono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tTelefonoActionPerformed(evt);
+            }
+        });
+        tTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tTelefonoKeyTyped(evt);
             }
         });
 
@@ -170,6 +181,12 @@ public class PSucursales extends javax.swing.JPanel {
 
         jLabel2.setText("IdSucursal");
 
+        tIdSucursal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tIdSucursalKeyTyped(evt);
+            }
+        });
+
         jLabel4.setText("Id Sucursal");
 
         jLabel6.setText("Direccion:");
@@ -186,7 +203,41 @@ public class PSucursales extends javax.swing.JPanel {
 
         jLabel9.setText("id Ciudad:");
 
+        tCodigoPostal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tCodigoPostalKeyTyped(evt);
+            }
+        });
+
+        tPresupuesto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tPresupuestoKeyTyped(evt);
+            }
+        });
+
+        tIdCiudad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tIdCiudadKeyTyped(evt);
+            }
+        });
+
         jLabel10.setText("Colonia:");
+
+        bAtras.setText("Atras");
+        bAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAtrasActionPerformed(evt);
+            }
+        });
+
+        tNumPage.setText("0");
+
+        bSiguiente.setText("Siguiente");
+        bSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSiguienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -249,6 +300,14 @@ public class PSucursales extends javax.swing.JPanel {
                                                 .addGap(111, 111, 111))))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE))
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGap(178, 178, 178)
+                .addComponent(bAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNumPage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bSiguiente)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,7 +347,12 @@ public class PSucursales extends javax.swing.JPanel {
                     .addComponent(bEditar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tNumPage)
+                    .addComponent(bSiguiente)
+                    .addComponent(bAtras))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -378,6 +442,70 @@ public class PSucursales extends javax.swing.JPanel {
     private void tDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tDireccionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tDireccionActionPerformed
+
+    private void tIdSucursalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tIdSucursalKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tIdSucursal, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tIdSucursalKeyTyped
+
+    private void tTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tTelefonoKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tTelefono, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tTelefonoKeyTyped
+
+    private void tIdCiudadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tIdCiudadKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tIdCiudad, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tIdCiudadKeyTyped
+
+    private void tCodigoPostalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCodigoPostalKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tCodigoPostal, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tCodigoPostalKeyTyped
+
+    private void tPresupuestoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tPresupuestoKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tPresupuesto, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tPresupuestoKeyTyped
+
+    private void bAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAtrasActionPerformed
+        // TODO add your handling code here:
+        if(pagina>0)pagina--;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bAtrasActionPerformed
+
+    private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
+        // TODO add your handling code here:
+        if(pagina<noPaginas)pagina++;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bSiguienteActionPerformed
     public void cargar() {
         this.tDatos.setModel(sdao.cargarTabla(tDatos));
     }
@@ -391,15 +519,30 @@ public class PSucursales extends javax.swing.JPanel {
         this.tDireccion.setText("");
         this.tPresupuesto.setText("");
     }
+    public void paginar(){
+        if(pagina==0){
+            this.bAtras.setVisible(false);
+        }else{
+            this.bAtras.setVisible(true);
+        }
+        if(pagina<noPaginas){
+            this.bSiguiente.setVisible(true);
+        }else{
+            this.bSiguiente.setVisible(false);
+        }
+        this.tNumPage.setText((pagina+1)+" de "+(noPaginas+1));
+    }
     public void datoTabla(){
         
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAtras;
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bEditar;
     private javax.swing.JButton bEliminar;
     private javax.swing.JButton bGuardar;
+    private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -420,6 +563,7 @@ public class PSucursales extends javax.swing.JPanel {
     private javax.swing.JTextField tIdCiudad;
     private javax.swing.JTextField tIdSucursal;
     private javax.swing.JTextField tNombre;
+    private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tPresupuesto;
     private javax.swing.JTextField tTelefono;
     // End of variables declaration//GEN-END:variables
