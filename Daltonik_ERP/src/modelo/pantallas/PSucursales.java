@@ -362,7 +362,11 @@ public class PSucursales extends javax.swing.JPanel {
     }//GEN-LAST:event_chkEstatusActionPerformed
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
-        suc=new Sucursales();
+        if(this.tIdSucursal.getText().length() == 0 || this.tCodigoPostal.getText().length() == 0 || this.tColonia.getText().length() == 0 || this.tDireccion.getText().length() == 0 || this.tIdCiudad.getText().length() == 0 || this.tNombre.getText().length() == 0 || this.tPresupuesto.getText().length() == 0 || this.tTelefono.getText().length() == 0){
+            JOptionPane.showMessageDialog(tNombre, "No puede haber campos vacios");
+        }
+        else{
+            suc=new Sucursales();
         suc.setIdSucursal(Integer.parseInt(this.tIdSucursal.getText()));
         suc.setNombre(this.tNombre.getText());
         suc.setTelefono(this.tTelefono.getText());
@@ -377,8 +381,11 @@ public class PSucursales extends javax.swing.JPanel {
             suc.setEstatus("I");
         }
         sdao.guardarSucursal(suc);
+        noPaginas=sdao.cantPaginas();
         cargar();
+        paginar();
         limpiar();
+        }
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void tTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tTelefonoActionPerformed
@@ -435,8 +442,11 @@ public class PSucursales extends javax.swing.JPanel {
     }//GEN-LAST:event_bEditarActionPerformed
 
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
-        // TODO add your handling code here:
-        
+        sdao.eliminarSucursal(Integer.parseInt(this.tBusqueda.getText()));
+       this.tDatos.setModel(sdao.cargarTabla(tDatos, pagina));
+       noPaginas=sdao.cantPaginas();
+        paginar();
+        limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
     private void tDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tDireccionActionPerformed
@@ -507,7 +517,7 @@ public class PSucursales extends javax.swing.JPanel {
         cargar();
     }//GEN-LAST:event_bSiguienteActionPerformed
     public void cargar() {
-        this.tDatos.setModel(sdao.cargarTabla(tDatos));
+        this.tDatos.setModel(sdao.cargarTabla(tDatos, pagina));
     }
     public void limpiar(){
         this.tTelefono.setText("");
