@@ -292,19 +292,25 @@ public class PLaboratorios extends javax.swing.JPanel {
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
         lab=new Laboratorios();
-        lab.setIdLaboratorio(Integer.parseInt(this.tIdLaboratorio.getText()));
-        lab.setNombre(this.tNombre.getText());
-        lab.setOrigen(this.tOrigen.getText());
-        if(this.chkEstatus.isSelected()){
-            lab.setEstatus("A");
-        }else{
-            lab.setEstatus("I");
+        if(this.tIdLaboratorio.getText().length() == 0 || this.tNombre.getText().length() == 0 || this.tOrigen.getText().length() == 0 ){
+            JOptionPane.showMessageDialog(tNombre, "No puede haber campos vacios");
         }
-        ldao.guardarLaboratorio(lab);
-        noPaginas=ldao.cantPaginas();
-        cargar();
-        paginar();
-        limpiar();
+        else{
+            lab.setIdLaboratorio(Integer.parseInt(this.tIdLaboratorio.getText()));
+            lab.setNombre(this.tNombre.getText());
+            lab.setOrigen(this.tOrigen.getText());
+            if(this.chkEstatus.isSelected()){
+                lab.setEstatus("A");
+            }else{
+                lab.setEstatus("I");
+            }
+            ldao.guardarLaboratorio(lab);
+            noPaginas=ldao.cantPaginas();
+            cargar();
+            paginar();
+            limpiar();
+        }
+        
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void tOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tOrigenActionPerformed
