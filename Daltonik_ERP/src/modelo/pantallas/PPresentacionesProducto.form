@@ -35,30 +35,39 @@
                                   </Group>
                                   <Component id="jLabel8" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="chkEstatus" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="bGuardar" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="chkEstatus" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="bGuardar" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                  <Component id="tPuntoReorden" alignment="1" pref="141" max="32767" attributes="0"/>
+                                                  <Component id="tPrecioVenta" alignment="1" pref="141" max="32767" attributes="0"/>
+                                                  <Component id="tPrecioCompra" alignment="1" pref="141" max="32767" attributes="0"/>
+                                                  <Component id="tidPresentacion" max="32767" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="tBusqueda" min="-2" pref="99" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                  <Component id="bEditar" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="bEliminar" alignment="1" max="32767" attributes="0"/>
+                                                  <Component id="bBuscar" max="32767" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="tPuntoReorden" alignment="1" pref="141" max="32767" attributes="0"/>
-                                          <Component id="tPrecioVenta" alignment="1" pref="141" max="32767" attributes="0"/>
-                                          <Component id="tPrecioCompra" alignment="1" pref="141" max="32767" attributes="0"/>
-                                          <Component id="tidPresentacion" max="32767" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="tBusqueda" min="-2" pref="99" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="bEditar" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="bEliminar" alignment="1" max="32767" attributes="0"/>
-                                          <Component id="bBuscar" max="32767" attributes="0"/>
-                                      </Group>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Component id="tidEmpaque" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="279" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -67,17 +76,21 @@
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="tidEmpaque" alignment="1" max="32767" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLabel7" min="-2" pref="81" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="tidProducto" pref="141" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <Component id="jLabel7" min="-2" pref="81" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="tidProducto" pref="141" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="289" max="-2" attributes="0"/>
                   </Group>
               </Group>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="169" max="-2" attributes="0"/>
+              <Component id="bAtras" min="-2" pref="73" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="tNumPage" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="bSiguiente" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -126,7 +139,13 @@
               </Group>
               <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="124" max="-2" attributes="0"/>
-              <EmptySpace pref="63" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tNumPage" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bSiguiente" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bAtras" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="34" max="32767" attributes="0"/>
               <Component id="jLabel1" min="-2" pref="14" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -242,6 +261,9 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="tBusqueda">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tBusquedaKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bBuscar">
       <Properties>
@@ -275,6 +297,7 @@
     <Component class="javax.swing.JTextField" name="tidPresentacion">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tidPresentacionActionPerformed"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tidPresentacionKeyTyped"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
@@ -297,6 +320,27 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tidEmpaque">
+    </Component>
+    <Component class="javax.swing.JButton" name="bAtras">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Atras"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bAtrasActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="tNumPage">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="bSiguiente">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Siguiente"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bSiguienteActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

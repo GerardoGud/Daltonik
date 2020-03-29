@@ -7,6 +7,7 @@ package modelo.pantallas;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 import modelo.datos.EmpaqueDAO;
 import modelo.beans.Empaque;
 import modelo.beans.PresentacionesProducto;
@@ -14,23 +15,28 @@ import modelo.datos.PresentacionesProductoDAO;
 
 /**
  *
- * @author LuisCerv
+ * @author Francisco Figueroa
  */
 public class PPresentacionesProducto extends javax.swing.JPanel {
+
     private PresentacionesProductoDAO pdao;
     private PresentacionesProducto pr;
     private boolean edit;
-    private String user; 
+    private String user;
     private String pwd;
-    
+    private int pagina = 0;
+    private int noPaginas = 0;
+
     public PPresentacionesProducto(String user, String pwd) {
         initComponents();
         this.user = user;
         this.pwd = pwd;
-        edit=false;
-        pdao=new PresentacionesProductoDAO(user, pwd);
-        pr=new PresentacionesProducto();
+        edit = false;
+        pdao = new PresentacionesProductoDAO(user, pwd);
+        pr = new PresentacionesProducto();
+        noPaginas = pdao.cantPaginas();
         cargar();
+        paginar();
         this.tBusqueda.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char caracter = e.getKeyChar();
@@ -56,7 +62,7 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
                 char caracter = e.getKeyChar();
                 if (((caracter < '0')
                         || (caracter > '9'))
-                        && (caracter != KeyEvent.VK_BACK_SPACE)&& (caracter != '.')) {
+                        && (caracter != KeyEvent.VK_BACK_SPACE) && (caracter != '.')) {
                     e.consume();
                 }
             }
@@ -94,6 +100,9 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
         tidProducto = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         tidEmpaque = new javax.swing.JTextField();
+        bAtras = new javax.swing.JButton();
+        tNumPage = new javax.swing.JLabel();
+        bSiguiente = new javax.swing.JButton();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -155,6 +164,12 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
             }
         });
 
+        tBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tBusquedaKeyTyped(evt);
+            }
+        });
+
         bBuscar.setText("Buscar");
         bBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,6 +198,11 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
                 tidPresentacionActionPerformed(evt);
             }
         });
+        tidPresentacion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tidPresentacionKeyTyped(evt);
+            }
+        });
 
         jLabel6.setText("idPresentacion:");
 
@@ -191,6 +211,22 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText("idEmpaque:");
+
+        bAtras.setText("Atras");
+        bAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAtrasActionPerformed(evt);
+            }
+        });
+
+        tNumPage.setText("0");
+
+        bSiguiente.setText("Siguiente");
+        bSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSiguienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -212,37 +248,48 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
                                         .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(chkEstatus)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(bGuardar))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(chkEstatus)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(bGuardar))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(tPuntoReorden, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                                    .addComponent(tPrecioVenta, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                                    .addComponent(tPrecioCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                                    .addComponent(tidPresentacion))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(2, 2, 2)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(bEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(bEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(bBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(tPuntoReorden, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                            .addComponent(tPrecioVenta, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                            .addComponent(tPrecioCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                            .addComponent(tidPresentacion))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(2, 2, 2)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(bEditar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(bEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(bBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                        .addGap(10, 10, 10)
+                                        .addComponent(tidEmpaque)
+                                        .addGap(279, 279, 279))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tidEmpaque)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tidProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)))
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tidProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
                         .addGap(289, 289, 289))))
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGap(169, 169, 169)
+                .addComponent(bAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tNumPage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bSiguiente)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,7 +329,12 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
                     .addComponent(bGuardar))
                 .addGap(7, 7, 7)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tNumPage)
+                    .addComponent(bSiguiente)
+                    .addComponent(bAtras))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -292,22 +344,27 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
     }//GEN-LAST:event_chkEstatusActionPerformed
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
-        pr=new PresentacionesProducto();
-        pr.setIdPresentacion(Integer.parseInt(this.tidPresentacion.getText()));
-        pr.setPrecioCompra(Float.parseFloat(this.tPrecioCompra.getText()));
-        pr.setPrecioVenta(Float.parseFloat(this.tPrecioVenta.getText()));
-        pr.setPuntoReorden(Float.parseFloat(this.tPuntoReorden.getText()));
-        pr.setIdProducto(Integer.parseInt(this.tidProducto.getText()));
-        pr.setIdEmpaque(Integer.parseInt(this.tidEmpaque.getText()));
-        if(this.chkEstatus.isSelected()){
-            pr.setEstatus("A");
-        }else{
-            pr.setEstatus("I");
+        pr = new PresentacionesProducto();
+        if (this.tidPresentacion.getText().length() == 0 || this.tPrecioCompra.getText().length() == 0 || this.tPrecioVenta.getText().length() == 0
+                || this.tPuntoReorden.getText().length() == 0 || this.tidProducto.getText().length() == 0 || this.tidEmpaque.getText().length() == 0) {
+            JOptionPane.showMessageDialog(tidPresentacion, "No puede haber campos vacios");
+        } else {
+            pr.setIdPresentacion(Integer.parseInt(this.tidPresentacion.getText()));
+            pr.setPrecioCompra(Float.parseFloat(this.tPrecioCompra.getText()));
+            pr.setPrecioVenta(Float.parseFloat(this.tPrecioVenta.getText()));
+            pr.setPuntoReorden(Float.parseFloat(this.tPuntoReorden.getText()));
+            pr.setIdProducto(Integer.parseInt(this.tidProducto.getText()));
+            pr.setIdEmpaque(Integer.parseInt(this.tidEmpaque.getText()));
+            if (this.chkEstatus.isSelected()) {
+                pr.setEstatus("A");
+            } else {
+                pr.setEstatus("I");
+            }
+            pdao.guardarPresentacionesProducto(pr);
+            cargar();
+            paginar();
+            limpiar();
         }
-        pdao.guardarPresentacionesProducto(pr);
-        cargar();
-        limpiar();
-        
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void tPrecioVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tPrecioVentaActionPerformed
@@ -317,7 +374,9 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
         pdao.eliminarPresentacionesProducto(Integer.parseInt(this.tBusqueda.getText()));
-        cargar();
+        this.tDatos.setModel(pdao.cargarTabla(tDatos, pagina));
+        noPaginas=pdao.cantPaginas();
+        paginar();
         limpiar();
     }//GEN-LAST:event_bEliminarActionPerformed
 
@@ -329,8 +388,8 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
-        if(edit) {
-            edit=false;
+        if (edit) {
+            edit = false;
             pr = new PresentacionesProducto();
             pr.setIdPresentacion(Integer.parseInt(this.tBusqueda.getText()));
             pr.setPrecioCompra(Float.parseFloat(this.tPrecioCompra.getText()));
@@ -347,8 +406,8 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
             pdao.editarPresentacionesProducto(pr, pr.getIdPresentacion());
             cargar();
             limpiar();
-        }else{
-            edit=true;
+        } else {
+            edit = true;
             this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
             pr = pdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
             this.tPrecioCompra.setText(String.valueOf(pr.getPrecioCompra()));
@@ -370,22 +429,77 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
     private void tidPresentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tidPresentacionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tidPresentacionActionPerformed
+
+    private void bAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAtrasActionPerformed
+        // TODO add your handling code here:
+        if (pagina > 0)pagina--;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bAtrasActionPerformed
+
+    private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
+        // TODO add your handling code here:
+        if (pagina < noPaginas)pagina++;
+        paginar();
+        cargar();
+    }//GEN-LAST:event_bSiguienteActionPerformed
+
+    private void tidPresentacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tidPresentacionKeyTyped
+         char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tidPresentacion, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tidPresentacionKeyTyped
+
+    private void tBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tBusquedaKeyTyped
+        char validar = evt.getKeyChar();
+        if(Character.isLetter(validar)){
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(tidPresentacion, "Caracter no valido");
+        }
+    }//GEN-LAST:event_tBusquedaKeyTyped
     public void cargar() {
-        this.tDatos.setModel(pdao.cargarTabla(tDatos));
+        this.tDatos.setModel(pdao.cargarTabla(tDatos,pagina));
     }
-    public void limpiar(){
-        this.tPrecioVenta.setText("");
+
+    public void limpiar() {
         this.tidPresentacion.setText("");
         this.tPrecioCompra.setText("");
+        this.tPrecioVenta.setText("");
         this.tPuntoReorden.setText("");
+        this.tidProducto.setText("");
+        this.tidEmpaque.setText("");
     }
-    
 
+    public void paginar() {
+        if (pagina == 0) {
+            this.bAtras.setVisible(false);
+        } else {
+            this.bAtras.setVisible(true);
+        }
+        if (pagina < noPaginas) {
+            this.bSiguiente.setVisible(true);
+        } else {
+            this.bSiguiente.setVisible(false);
+        }
+        this.tNumPage.setText((pagina + 1) + " de " + (noPaginas + 1));
+    }
+
+    public void datoTabla() {
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAtras;
     private javax.swing.JButton bBuscar;
     private javax.swing.JButton bEditar;
     private javax.swing.JButton bEliminar;
     private javax.swing.JButton bGuardar;
+    private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -398,6 +512,7 @@ public class PPresentacionesProducto extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField tBusqueda;
     private javax.swing.JTable tDatos;
+    private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tPrecioCompra;
     private javax.swing.JTextField tPrecioVenta;
     private javax.swing.JTextField tPuntoReorden;

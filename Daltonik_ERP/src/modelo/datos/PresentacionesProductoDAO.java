@@ -5,20 +5,23 @@
  */
 package modelo.datos;
 
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.Empaque;
 import modelo.beans.PresentacionesProducto;
 import static modelo.datos.EmpaqueDAO.r;
+import static modelo.datos.LaboratoriosDAO.r;
 
 /**
  *
  * @author Francisco Figueroa
  */
 public class PresentacionesProductoDAO {
-
+    CallableStatement cts;
     static ResultSet r;
     ConnectURL cn;
     private final String user;
@@ -29,12 +32,30 @@ public class PresentacionesProductoDAO {
         this.pwd = pwd;
         cn = new ConnectURL(user, pwd);
     }
-
-    public DefaultTableModel cargarTabla(JTable tDatos) {
+    
+    public int cantPaginas(){
+        int p=0,s=0;
+        try {
+            r = cn.consultar("Select count(*) from PresentacionesProducto where estatus='A'");
+            while (r.next()) {
+                p=r.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        if(p%5==0){
+            s=(int)p/5;
+            s--;
+        }else{
+            s=(int)p/5;
+        }
+        return s;
+    }
+    public DefaultTableModel cargarTabla(JTable tDatos, int reg) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from PresentacionesProducto");
+            r = cn.consultar("select * from PresentacionesProducto where estatus='A' order by idPresentacion offset ("+reg+"*5) rows fetch next 5 rows only");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -95,15 +116,28 @@ public class PresentacionesProductoDAO {
     public void guardarPresentacionesProducto(PresentacionesProducto pr) {
         try {
             cn.ejecutar("INSERT INTO PresentacionesProducto VALUES (" + pr.getIdPresentacion() + ",'" + pr.getPrecioCompra()
-                    + "'," + pr.getPrecioVenta() + ",'" + pr.getPuntoReorden() + "'," + pr.getIdProducto() + "'," + pr.getIdEmpaque() + ");");
+                    + "'," + pr.getPrecioVenta() + ",'" + pr.getPuntoReorden() + "'," + pr.getIdProducto() + "'," + pr.getIdEmpaque() + ",'"+pr.getEstatus()+"');");
         } catch (Exception e) {
         }
     }
-
+    public int UltimoID() {
+		int idPresentacionesProductoU = 1;
+		String sql = "select max(idPresentacion)+1 idPresentacion from PresentacionesProducto";
+		try {
+			cn.ejecutar(sql);
+			if(r.next()) {
+				idPresentacionesProductoU=r.getInt("idPresentacion");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return idPresentacionesProductoU;
+	}
     public void editarPresentacionesProducto(PresentacionesProducto pr, int id) {
         try {
             cn.ejecutar("update PresentacionesProducto set puntoReorden=" + pr.getPuntoReorden() + ", precioCompra='" + pr.getPrecioCompra()
-                    + "',precioVenta='" + pr.getPrecioVenta() + "', idProducto=" + pr.getIdProducto() + "',idEmpaque='" + pr.getIdEmpaque() + " where idPresentacion=" + id + ";");
+                    + "',precioVenta='" + pr.getPrecioVenta() + "', idProducto=" + pr.getIdProducto() + "',idEmpaque='" + pr.getIdEmpaque() + "',estatus='"+pr.getEstatus()+"' where idPresentacion=" + id + ";");
         } catch (Exception e) {
         }
     }

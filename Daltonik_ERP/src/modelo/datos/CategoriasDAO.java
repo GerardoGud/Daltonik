@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.Categorias;
 import static modelo.datos.EmpaqueDAO.r;
+import static modelo.datos.PresentacionesProductoDAO.r;
 
 /**
  *
@@ -107,7 +108,20 @@ public Categorias buscarIdEdicion(int id) {
         } catch (Exception e) {
         }
     }
-
+      public int UltimoID() {
+		int idCategoriasU = 1;
+		String sql = "select max(idCategoria)+1 idCategoria from Categorias";
+		try {
+			cn.ejecutar(sql);
+			if(r.next()) {
+				idCategoriasU=r.getInt("idCategoria");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return idCategoriasU;
+	}
     public void editarCategorias(Categorias cat, int id) {
         try {
             cn.ejecutar("update categorias set  nombre='" + cat.getNombre()
