@@ -18,6 +18,7 @@ import modelo.pantallas.PCategorias;
 import modelo.pantallas.PEmpaque;
 import modelo.pantallas.PLaboratorios;
 import modelo.pantallas.PMedida;
+import modelo.pantallas.PPedidoDetalle;
 import modelo.pantallas.PPresentacionesProducto;
 import modelo.pantallas.PTiposUsuario;
 import modelo.pantallas.PUsuario;
@@ -117,7 +118,7 @@ public class Principal extends javax.swing.JFrame{
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        panelIMG1 = new daltonik_erp.PanelIMG(fondo);
+        panelIMG1 = new daltonik_erp.PanelIMG();
         lUsuario = new javax.swing.JLabel();
         lHyF = new javax.swing.JLabel();
         Pantallas = new javax.swing.JTabbedPane();
@@ -135,6 +136,7 @@ public class Principal extends javax.swing.JFrame{
         mEmpaques = new javax.swing.JMenuItem();
         mLaboratorios = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        mPDetalle = new javax.swing.JMenuItem();
         mOpciones = new javax.swing.JMenu();
         mConfig = new javax.swing.JMenuItem();
 
@@ -205,17 +207,15 @@ public class Principal extends javax.swing.JFrame{
                     .addGroup(panelIMG1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lHyF, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                        .addGap(170, 170, 170)
                         .addComponent(lUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelIMG1Layout.createSequentialGroup()
-                        .addGroup(panelIMG1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panelIMG1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGroup(panelIMG1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Pantallas, javax.swing.GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)))
+                        .addComponent(Pantallas)))
                 .addContainerGap())
         );
         panelIMG1Layout.setVerticalGroup(
@@ -226,12 +226,13 @@ public class Principal extends javax.swing.JFrame{
                         .addContainerGap()
                         .addComponent(Pantallas))
                     .addGroup(panelIMG1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 325, Short.MAX_VALUE)))
+                        .addGap(0, 314, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelIMG1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lUsuario)
@@ -308,6 +309,14 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         jMenu2.add(jMenuItem1);
+
+        mPDetalle.setText("PedidoDetalle");
+        mPDetalle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mPDetalleActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mPDetalle);
 
         jMenuBar1.add(jMenu2);
 
@@ -417,6 +426,12 @@ public class Principal extends javax.swing.JFrame{
         this.Pantallas.add("Configuracion",c);
     }//GEN-LAST:event_mConfigActionPerformed
 
+    private void mPDetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPDetalleActionPerformed
+        // TODO add your handling code here:
+        PPedidoDetalle pd=new PPedidoDetalle(user,pwd);
+        this.Pantallas.add("Detalles de pedido",pd);
+    }//GEN-LAST:event_mPDetalleActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -470,6 +485,7 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem mLaboratorios;
     private javax.swing.JMenuItem mMedidas;
     private javax.swing.JMenu mOpciones;
+    private javax.swing.JMenuItem mPDetalle;
     private javax.swing.JMenuItem mSesion;
     private javax.swing.JMenuItem mTipoUsu;
     private javax.swing.JMenuItem mUsu;
