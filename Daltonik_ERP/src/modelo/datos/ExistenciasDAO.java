@@ -6,7 +6,6 @@
 package modelo.datos;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -20,20 +19,16 @@ import static modelo.datos.EmpaqueDAO.r;
 public class ExistenciasDAO {
     static ResultSet cts;
     ConnectURL cn;
-    private final String user; 
-    private final String pwd;
     
-    public ExistenciasDAO(String user, String pwd) {
-        this.user = user;
-        this.pwd = pwd;
+    public ExistenciasDAO(){
         cn=new ConnectURL();
     }
     
-    public DefaultTableModel cargarTabla(JTable tDatos, int reg) {
+    public DefaultTableModel cargarTabla(JTable tDatos) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from ExistenciasSucursal order by idPresentacion offset ("+reg+"*5) rows fetch next 5 rows only");
+            r = cn.consultar("select * from ExistenciasSucursal");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -48,58 +43,39 @@ public class ExistenciasDAO {
         }
     }
     
-    public int cantPaginas(){
-        int p=0,s=0;
-        try {
-            r = cn.consultar("Select count(*) from ExistenciasSucursal");
-            while (r.next()) {
-                p=r.getInt(1);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        if(p%5==0){
-            s=(int)p/5;
-            s--;
-        }else{
-            s=(int)p/5;
-        }
-        return s;
-    }
-    
     public void guardarExistecias(ExistenciasSucursal exis) {
        
         try {
-            cn.ejecutar("INSERT INTO ExistenciasSucursal VALUES ("+exis.getIdPresentacion()+","+exis.getIdSucursal()
-                    +","+exis.getCantidad()+");");
+            cn.ejecutar("INSERT INTO ExistenciasSucursal VALUES ("+exis.getIdPresentacion()+",'"+exis.getIdSucursal()
+                    +"','"+exis.getCantidad()+"','"+exis.getEstatus()+"'"+");");
         } catch (Exception e) {
         }
     }
     
     public void editarExistencias(ExistenciasSucursal exis) {
         try {
-            cn.ejecutar("update ExistenciasSucursal set idPresentacion="+exis.getIdPresentacion()
-                    +",cantidad="+exis.getCantidad()+"where idSucursal="+exis.getIdSucursal()+";");
+            cn.ejecutar("update ExistenciasSucursal set idSucursal='"+exis.getIdSucursal()
+                    +"',cantidad='"+exis.getCantidad()+"',estatus='"+exis.getEstatus()+"'"+"where idUnidad="+exis.getIdPresentacion()+";");
         } catch (Exception e) {
         }
     }
     
-//    public void eliminarExistencias(int id){
-//        try {
-//            cn.ejecutar("update ExistenciasSucursal set estatus='I' where idPrensentacion="+id+";");
-//        } catch (Exception e) {
-//        }
-//    }
+    public void eliminarExistencias(int id){
+        try {
+            cn.ejecutar("update ExistenciasSucursal set estatus='I' where idPrensentacion="+id+";");
+        } catch (Exception e) {
+        }
+    }
     
     public ExistenciasSucursal buscarIdEdicion(int id) {
         ExistenciasSucursal exS=new ExistenciasSucursal();
         try {
-            r = cn.consultar("select * from ExistenciasSucursal where idPresentacion="+id+";");
+            r = cn.consultar("select * from ExistenciasSucursal where idPrensentacion="+id+";");
             while (r.next()) {
                 exS.setIdPresentacion(r.getInt(1));
                 exS.setIdSucursal(r.getInt(2));
                 exS.setCantidad(r.getString(3));
-//                exS.setEstatus(r.getString(4));
+                exS.setEstatus(r.getString(4));
                 
             }
             return exS;//jTable---jdatos
@@ -118,7 +94,7 @@ public class ExistenciasDAO {
                 dato.add(r.getInt(1));
                 dato.add(r.getInt(2));
                 dato.add(r.getString(3));
-//                dato.add(r.getString(4));
+                dato.add(r.getString(4));
                 tabla.addRow(dato);
                 tDatos.setModel(tabla);
             }

@@ -59,9 +59,7 @@ private String extencion;
             File file = new File(archivoRuta+nombre+extencion);
             try{
                 text=new Scanner(file);
-                while (text.hasNextLine()) {
-                    code=text.nextLine();
-                }
+                code=text.nextLine();
                 text.close();
             } catch (FileNotFoundException e) {
             } 
