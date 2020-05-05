@@ -20,6 +20,7 @@ import modelo.pantallas.PLaboratorios;
 import modelo.pantallas.PMedida;
 import modelo.pantallas.PPedidoDetalle;
 import modelo.pantallas.PPresentacionesProducto;
+import modelo.pantallas.PProductos;
 import modelo.pantallas.PTiposUsuario;
 import modelo.pantallas.PUsuario;
 import modelo.pantallas.PanelConfiguracion;
@@ -137,6 +138,7 @@ public class Principal extends javax.swing.JFrame{
         mLaboratorios = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         mPDetalle = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         mOpciones = new javax.swing.JMenu();
         mConfig = new javax.swing.JMenuItem();
 
@@ -318,6 +320,14 @@ public class Principal extends javax.swing.JFrame{
         });
         jMenu2.add(mPDetalle);
 
+        jMenuItem2.setText("Producto");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
         jMenuBar1.add(jMenu2);
 
         mOpciones.setText("Opciones");
@@ -432,6 +442,12 @@ public class Principal extends javax.swing.JFrame{
         this.Pantallas.add("Detalles de pedido",pd);
     }//GEN-LAST:event_mPDetalleActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        PProductos p=new PProductos(user,pwd);
+        this.Pantallas.add("PProductos",p);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -477,6 +493,7 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JLabel lHyF;
     private javax.swing.JLabel lUsuario;
     private javax.swing.JMenuItem mCategorias;
