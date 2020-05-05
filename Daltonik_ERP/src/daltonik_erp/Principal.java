@@ -16,11 +16,14 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import modelo.pantallas.PCategorias;
 import modelo.pantallas.PEmpaque;
+import modelo.pantallas.PExistencias;
 import modelo.pantallas.PLaboratorios;
 import modelo.pantallas.PMedida;
 import modelo.pantallas.PPedidoDetalle;
+import modelo.pantallas.PPedidos;
 import modelo.pantallas.PPresentacionesProducto;
 import modelo.pantallas.PProductos;
+import modelo.pantallas.PSucursales;
 import modelo.pantallas.PTiposUsuario;
 import modelo.pantallas.PUsuario;
 import modelo.pantallas.PanelConfiguracion;
@@ -107,7 +110,8 @@ public class Principal extends javax.swing.JFrame{
         initComponents();
     }
 
-    
+//    JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
+//                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -119,7 +123,7 @@ public class Principal extends javax.swing.JFrame{
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        panelIMG1 = new daltonik_erp.PanelIMG();
+        panelIMG1 = new daltonik_erp.PanelIMG(fondo);
         lUsuario = new javax.swing.JLabel();
         lHyF = new javax.swing.JLabel();
         Pantallas = new javax.swing.JTabbedPane();
@@ -132,15 +136,29 @@ public class Principal extends javax.swing.JFrame{
         mTipoUsu = new javax.swing.JMenuItem();
         mUsu = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        mPedidos = new javax.swing.JMenuItem();
+        mPDetalle = new javax.swing.JMenuItem();
+        mPagos = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        mProducto = new javax.swing.JMenuItem();
+        mPresentaciones = new javax.swing.JMenuItem();
+        mProveedorProducto = new javax.swing.JMenuItem();
+        mExistencias = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        mProveedores = new javax.swing.JMenuItem();
+        mCuentas = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        mContactos = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        mSucursales = new javax.swing.JMenuItem();
+        mLaboratorios = new javax.swing.JMenuItem();
         mCategorias = new javax.swing.JMenuItem();
         mMedidas = new javax.swing.JMenuItem();
         mEmpaques = new javax.swing.JMenuItem();
-        mLaboratorios = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        mPDetalle = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        mImagenes = new javax.swing.JMenuItem();
         mOpciones = new javax.swing.JMenu();
         mConfig = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jButton1.setText("jButton1");
 
@@ -270,47 +288,15 @@ public class Principal extends javax.swing.JFrame{
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Compras x");
+        jMenu2.setText("Compras");
 
-        mCategorias.setText("Categorias");
-        mCategorias.addActionListener(new java.awt.event.ActionListener() {
+        mPedidos.setText("Pedidos");
+        mPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mCategoriasActionPerformed(evt);
+                mPedidosActionPerformed(evt);
             }
         });
-        jMenu2.add(mCategorias);
-
-        mMedidas.setText("UnidadMedida");
-        mMedidas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mMedidasActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mMedidas);
-
-        mEmpaques.setText("Empaques");
-        mEmpaques.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mEmpaquesActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mEmpaques);
-
-        mLaboratorios.setText("Laboratorios");
-        mLaboratorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mLaboratoriosActionPerformed(evt);
-            }
-        });
-        jMenu2.add(mLaboratorios);
-
-        jMenuItem1.setText("Muestra");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem1);
+        jMenu2.add(mPedidos);
 
         mPDetalle.setText("PedidoDetalle");
         mPDetalle.addActionListener(new java.awt.event.ActionListener() {
@@ -320,15 +306,132 @@ public class Principal extends javax.swing.JFrame{
         });
         jMenu2.add(mPDetalle);
 
-        jMenuItem2.setText("Producto");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        mPagos.setText("Pagos");
+        mPagos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                mPagosActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(mPagos);
 
         jMenuBar1.add(jMenu2);
+
+        jMenu5.setText("Productos");
+
+        mProducto.setText("Producto");
+        mProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mProductoActionPerformed(evt);
+            }
+        });
+        jMenu5.add(mProducto);
+
+        mPresentaciones.setText("Presentaciones");
+        mPresentaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mPresentacionesActionPerformed(evt);
+            }
+        });
+        jMenu5.add(mPresentaciones);
+
+        mProveedorProducto.setText("Proveedor");
+        mProveedorProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mProveedorProductoActionPerformed(evt);
+            }
+        });
+        jMenu5.add(mProveedorProducto);
+
+        mExistencias.setText("Existencias");
+        mExistencias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mExistenciasActionPerformed(evt);
+            }
+        });
+        jMenu5.add(mExistencias);
+
+        jMenuBar1.add(jMenu5);
+
+        jMenu4.setText("Proveedor");
+
+        mProveedores.setText("Proveedores");
+        mProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mProveedoresActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mProveedores);
+
+        mCuentas.setText("Cuentas Proveedores");
+        mCuentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mCuentasActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mCuentas);
+        jMenu4.add(jSeparator1);
+
+        mContactos.setText("Contactos");
+        mContactos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mContactosActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mContactos);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu3.setText("Catalogos");
+
+        mSucursales.setText("Sucursales");
+        mSucursales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mSucursalesActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mSucursales);
+
+        mLaboratorios.setText("Laboratorios");
+        mLaboratorios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLaboratoriosActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mLaboratorios);
+
+        mCategorias.setText("Categorias");
+        mCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mCategoriasActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mCategorias);
+
+        mMedidas.setText("UnidadMedida");
+        mMedidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mMedidasActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mMedidas);
+
+        mEmpaques.setText("Empaques");
+        mEmpaques.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mEmpaquesActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mEmpaques);
+
+        mImagenes.setText("Imagenes");
+        mImagenes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mImagenesActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mImagenes);
+
+        jMenuBar1.add(jMenu3);
 
         mOpciones.setText("Opciones");
 
@@ -339,6 +442,14 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         mOpciones.add(mConfig);
+
+        jMenuItem1.setText("Muestra");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        mOpciones.add(jMenuItem1);
 
         jMenuBar1.add(mOpciones);
 
@@ -426,8 +537,7 @@ public class Principal extends javax.swing.JFrame{
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        PPresentacionesProducto pp=new PPresentacionesProducto (user,pwd);
-        this.Pantallas.add("PresentacionesProducto",pp);
+        
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mConfigActionPerformed
@@ -437,16 +547,64 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_mConfigActionPerformed
 
     private void mPDetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPDetalleActionPerformed
-        // TODO add your handling code here:
         PPedidoDetalle pd=new PPedidoDetalle(user,pwd);
         this.Pantallas.add("Detalles de pedido",pd);
     }//GEN-LAST:event_mPDetalleActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
+    private void mPresentacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPresentacionesActionPerformed
+        PPresentacionesProducto pp=new PPresentacionesProducto (user,pwd);
+        this.Pantallas.add("PresentacionesProducto",pp);
+    }//GEN-LAST:event_mPresentacionesActionPerformed
+
+    private void mPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPedidosActionPerformed
+        PPedidos pp=new PPedidos(user,pwd);
+        this.Pantallas.add("Pedidos",pp);
+    }//GEN-LAST:event_mPedidosActionPerformed
+
+    private void mPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPagosActionPerformed
+        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
+                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_mPagosActionPerformed
+
+    private void mProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mProductoActionPerformed
         PProductos p=new PProductos(user,pwd);
-        this.Pantallas.add("PProductos",p);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+        this.Pantallas.add("Productos",p);
+    }//GEN-LAST:event_mProductoActionPerformed
+
+    private void mProveedorProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mProveedorProductoActionPerformed
+        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
+                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_mProveedorProductoActionPerformed
+
+    private void mExistenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExistenciasActionPerformed
+        PExistencias p=new PExistencias(user,pwd);
+        this.Pantallas.add("Existencias",p);
+    }//GEN-LAST:event_mExistenciasActionPerformed
+
+    private void mProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mProveedoresActionPerformed
+        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
+                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_mProveedoresActionPerformed
+
+    private void mCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCuentasActionPerformed
+        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
+                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_mCuentasActionPerformed
+
+    private void mContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mContactosActionPerformed
+        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
+                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_mContactosActionPerformed
+
+    private void mSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSucursalesActionPerformed
+        PSucursales p=new PSucursales(user,pwd);
+        this.Pantallas.add("Sucursales",p);
+    }//GEN-LAST:event_mSucursalesActionPerformed
+
+    private void mImagenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mImagenesActionPerformed
+        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
+                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_mImagenesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -491,19 +649,33 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JButton jButton4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel lHyF;
     private javax.swing.JLabel lUsuario;
     private javax.swing.JMenuItem mCategorias;
     private javax.swing.JMenuItem mConfig;
+    private javax.swing.JMenuItem mContactos;
+    private javax.swing.JMenuItem mCuentas;
     private javax.swing.JMenuItem mEmpaques;
+    private javax.swing.JMenuItem mExistencias;
+    private javax.swing.JMenuItem mImagenes;
     private javax.swing.JMenuItem mLaboratorios;
     private javax.swing.JMenuItem mMedidas;
     private javax.swing.JMenu mOpciones;
     private javax.swing.JMenuItem mPDetalle;
+    private javax.swing.JMenuItem mPagos;
+    private javax.swing.JMenuItem mPedidos;
+    private javax.swing.JMenuItem mPresentaciones;
+    private javax.swing.JMenuItem mProducto;
+    private javax.swing.JMenuItem mProveedorProducto;
+    private javax.swing.JMenuItem mProveedores;
     private javax.swing.JMenuItem mSesion;
+    private javax.swing.JMenuItem mSucursales;
     private javax.swing.JMenuItem mTipoUsu;
     private javax.swing.JMenuItem mUsu;
     private daltonik_erp.PanelIMG panelIMG1;

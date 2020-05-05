@@ -29,6 +29,7 @@ public class PanelConfiguracion extends javax.swing.JPanel {
         String con1;
         String con2;
         con=JOptionPane.showInputDialog(this, "Introduzca su contraseña de configuracion", "Seguridad", JOptionPane.WARNING_MESSAGE);
+        try{
         if(con.equals("")){
             con1=JOptionPane.showInputDialog(this, "Necesita crear una contraseña para proteger\n"
                     + "su configuracion", "Seguridad", JOptionPane.WARNING_MESSAGE);
@@ -47,6 +48,9 @@ public class PanelConfiguracion extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this,"Contaseña erronea","Error",JOptionPane.ERROR_MESSAGE);
                 this.removeAll();
             }
+        }
+        }catch(NullPointerException e){
+            
         }
     }
     
