@@ -7,9 +7,14 @@ package modelo.pantallas;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.datos.SucursalesDAO;
 import modelo.beans.Sucursales;
+import modelo.datos.ConnectURL;
 
 /**
  *
@@ -23,14 +28,23 @@ public class PSucursales extends javax.swing.JPanel {
     private String pwd;
     private int pagina=0;
     private int noPaginas=0;
-    public PSucursales(String user, String pwd) {
+    public PSucursales(String user, String pwd) throws SQLException {
         initComponents();
         this.user = user;
         this.pwd = pwd;
         sdao=new SucursalesDAO(user, pwd);
         suc=new Sucursales();
-        cargar();
         edit=false;
+        
+        tIdSucursal.setText(""+sdao.UltimoID());
+        
+        jComboBox1.removeAllItems();
+        ArrayList<String> listaCombo = new ArrayList<String>();
+        listaCombo = sdao.LlenarCombo();
+        for (int i = 0; i < listaCombo.size(); i++) {
+            jComboBox1.addItem(listaCombo.get(i));
+        }
+        
         this.tBusqueda.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char caracter = e.getKeyChar();
@@ -53,7 +67,8 @@ public class PSucursales extends javax.swing.JPanel {
         });
         
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,12 +101,12 @@ public class PSucursales extends javax.swing.JPanel {
         jLabel9 = new javax.swing.JLabel();
         tCodigoPostal = new javax.swing.JTextField();
         tPresupuesto = new javax.swing.JTextField();
-        tIdCiudad = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         tColonia = new javax.swing.JTextField();
         bAtras = new javax.swing.JButton();
         tNumPage = new javax.swing.JLabel();
         bSiguiente = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -201,7 +216,7 @@ public class PSucursales extends javax.swing.JPanel {
 
         jLabel8.setText("Presupuesto:");
 
-        jLabel9.setText("id Ciudad:");
+        jLabel9.setText("Ciudad:");
 
         tCodigoPostal.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -212,12 +227,6 @@ public class PSucursales extends javax.swing.JPanel {
         tPresupuesto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tPresupuestoKeyTyped(evt);
-            }
-        });
-
-        tIdCiudad.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tIdCiudadKeyTyped(evt);
             }
         });
 
@@ -236,6 +245,13 @@ public class PSucursales extends javax.swing.JPanel {
         bSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bSiguienteActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
             }
         });
 
@@ -288,10 +304,14 @@ public class PSucursales extends javax.swing.JPanel {
                                                     .addComponent(jLabel10))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(tIdCiudad)
-                                                    .addComponent(tCodigoPostal)
-                                                    .addComponent(tColonia))
-                                                .addGap(112, 112, 112))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(tCodigoPostal)
+                                                            .addComponent(tColonia))
+                                                        .addGap(112, 112, 112))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(0, 0, Short.MAX_VALUE))))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(24, 24, 24)
                                                 .addComponent(jLabel8)
@@ -323,7 +343,7 @@ public class PSucursales extends javax.swing.JPanel {
                     .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel9)
-                    .addComponent(tIdCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,10 +382,29 @@ public class PSucursales extends javax.swing.JPanel {
     }//GEN-LAST:event_chkEstatusActionPerformed
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
-        if(this.tIdSucursal.getText().length() == 0 || this.tCodigoPostal.getText().length() == 0 || this.tColonia.getText().length() == 0 || this.tDireccion.getText().length() == 0 || this.tIdCiudad.getText().length() == 0 || this.tNombre.getText().length() == 0 || this.tPresupuesto.getText().length() == 0 || this.tTelefono.getText().length() == 0){
-            JOptionPane.showMessageDialog(tNombre, "No puede haber campos vacios");
-        }
-        else{
+            boolean campos = false;
+            boolean vTel = false;
+            boolean vCP = false;
+            if(this.tIdSucursal.getText().length() == 0 || this.tCodigoPostal.getText().length() == 0 || this.tColonia.getText().length() == 0 || this.tDireccion.getText().length() == 0 || this.tNombre.getText().length() == 0 || this.tPresupuesto.getText().length() == 0 || this.tTelefono.getText().length() == 0){
+                JOptionPane.showMessageDialog(tNombre, "No puede haber campos vacios"); 
+            }
+            else{
+                campos = true;
+            }
+            if(this.tTelefono.getText().length() != 10){
+                JOptionPane.showMessageDialog(tTelefono, "El numero de telefono no es valido");
+            }
+            else{
+                vTel = true;
+            }
+            if(this.tCodigoPostal.getText().length() != 5){
+                JOptionPane.showMessageDialog(tCodigoPostal, "El codigo postal no es valido");
+            }
+            else{
+                vCP = true;
+            }
+    
+        if(campos == true && vTel == true && vCP == true){
             suc=new Sucursales();
         suc.setIdSucursal(Integer.parseInt(this.tIdSucursal.getText()));
         suc.setNombre(this.tNombre.getText());
@@ -374,7 +413,7 @@ public class PSucursales extends javax.swing.JPanel {
         suc.setColonia(this.tColonia.getText());
         suc.setCodigoPostal(this.tCodigoPostal.getText());
         suc.setPresupuesto(Float.parseFloat(this.tPresupuesto.getText()));
-        suc.setIdCiudad(Integer.parseInt(this.tIdCiudad.getText()));
+        suc.setIdCiudad(jComboBox1.getSelectedIndex()+1);
         if(this.chkEstatus.isSelected()){
             suc.setEstatus("A");
         }else{
@@ -385,6 +424,11 @@ public class PSucursales extends javax.swing.JPanel {
         cargar();
         paginar();
         limpiar();
+        }
+        try {
+            tIdSucursal.setText(""+sdao.UltimoID());
+        } catch (SQLException ex) {
+            Logger.getLogger(PSucursales.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bGuardarActionPerformed
 
@@ -403,14 +447,14 @@ public class PSucursales extends javax.swing.JPanel {
         if(edit) {
             edit=false;
             suc = new Sucursales();
-            suc.setIdSucursal(Integer.parseInt(this.tIdSucursal.getText()));
+        suc.setIdSucursal(Integer.parseInt(this.tIdSucursal.getText()));
         suc.setNombre(this.tNombre.getText());
         suc.setTelefono(this.tTelefono.getText());
         suc.setDireccion(this.tDireccion.getText());
         suc.setColonia(this.tColonia.getText());
         suc.setCodigoPostal(this.tCodigoPostal.getText());
         suc.setPresupuesto(Float.parseFloat(this.tPresupuesto.getText()));
-        suc.setIdCiudad(Integer.parseInt(this.tIdCiudad.getText()));
+        suc.setIdCiudad(jComboBox1.getSelectedIndex()+1);
         if(this.chkEstatus.isSelected()){
             suc.setEstatus("A");
         }else{
@@ -420,12 +464,14 @@ public class PSucursales extends javax.swing.JPanel {
             cargar();
             limpiar();
         }else{
+            
             edit=true;
             this.tDatos.setModel(sdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
             suc = sdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
+            this.tIdSucursal.setText(Integer.toString(suc.getIdSucursal()));
             this.tNombre.setText(suc.getNombre());
             this.tTelefono.setText(suc.getTelefono());
-            this.tDireccion.setText(suc.getTelefono());
+            this.tDireccion.setText(suc.getDireccion());
             this.tColonia.setText(suc.getColonia());
             this.tCodigoPostal.setText(suc.getCodigoPostal());
             this.tPresupuesto.setText(Float.toString(suc.getPresupuesto()));
@@ -433,8 +479,7 @@ public class PSucursales extends javax.swing.JPanel {
                 this.chkEstatus.setSelected(true);
             } else {
                 this.chkEstatus.setSelected(false);
-            }
-            this.tIdCiudad.setText(Integer.toString(suc.getIdCiudad()));
+            }  
         }
         this.bBuscar.setVisible(!edit);
         this.bEliminar.setVisible(!edit);
@@ -473,16 +518,6 @@ public class PSucursales extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tTelefonoKeyTyped
 
-    private void tIdCiudadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tIdCiudadKeyTyped
-        char validar = evt.getKeyChar();
-        if(Character.isLetter(validar)){
-            getToolkit().beep();
-            evt.consume();
-            
-            JOptionPane.showMessageDialog(tIdCiudad, "Caracter no valido");
-        }
-    }//GEN-LAST:event_tIdCiudadKeyTyped
-
     private void tCodigoPostalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCodigoPostalKeyTyped
         char validar = evt.getKeyChar();
         if(Character.isLetter(validar)){
@@ -516,6 +551,10 @@ public class PSucursales extends javax.swing.JPanel {
         paginar();
         cargar();
     }//GEN-LAST:event_bSiguienteActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        
+    }//GEN-LAST:event_jComboBox1ActionPerformed
     public void cargar() {
         this.tDatos.setModel(sdao.cargarTabla(tDatos, pagina));
     }
@@ -525,7 +564,6 @@ public class PSucursales extends javax.swing.JPanel {
         this.tIdSucursal.setText("");
         this.tColonia.setText("");
         this.tCodigoPostal.setText("");
-        this.tIdCiudad.setText("");
         this.tDireccion.setText("");
         this.tPresupuesto.setText("");
     }
@@ -545,6 +583,7 @@ public class PSucursales extends javax.swing.JPanel {
     public void datoTabla(){
         
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAtras;
@@ -554,6 +593,7 @@ public class PSucursales extends javax.swing.JPanel {
     private javax.swing.JButton bGuardar;
     private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -570,7 +610,6 @@ public class PSucursales extends javax.swing.JPanel {
     private javax.swing.JTextField tColonia;
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tDireccion;
-    private javax.swing.JTextField tIdCiudad;
     private javax.swing.JTextField tIdSucursal;
     private javax.swing.JTextField tNombre;
     private javax.swing.JLabel tNumPage;
