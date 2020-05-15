@@ -13,6 +13,7 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -48,6 +49,9 @@ public class SucursalesDAO {
         }
         return s;
     }
+    
+    
+    
     public DefaultTableModel cargarTabla(JTable tDatos, int reg) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
@@ -125,19 +129,13 @@ public class SucursalesDAO {
         }
     }
     
-    public int UltimoID() {
-		int idLaboratorioU = 1;
-		String sql = "select max(idLaboratorio)+1 idLab from Laboratorios";
-		try {
-			cn.ejecutar(sql);
-			if(r.next()) {
-				idLaboratorioU=r.getInt("idLab");
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return idLaboratorioU;
+    public String UltimoID() throws SQLException {
+            String id = "";
+            r = cn.consultar("select max(idSucursal)+1 idSuc from sucursales");
+            if(r.next()){
+                id = r.getString("idSuc");
+            }
+            return id;
 	}
     public void editarSucursal(Sucursales suc,int id){
         try {
@@ -151,6 +149,29 @@ public class SucursalesDAO {
             cn.ejecutar("update Sucursales set estatus='I' where idSucursal="+id+";");
         } catch (Exception e) {
         }
+    }
+    
+    public ArrayList<String> LlenarCombo(){
+        ArrayList<String> lista = new ArrayList<String>();
+        try{
+            r = cn.consultar("Select * from ciudades");
+            while(r.next()){
+                lista.add(r.getString("nombre"));
+            }
+        }
+        catch(Exception e){
+            System.out.println("No funciona");
+        }
+        return lista;
+    }
+    
+    public String idSucEditar(String nombre) throws SQLException{
+        String id = "";
+        r = cn.consultar("select idSucursal from sucursales where nombre = "+nombre+";");
+            if(r.next()){
+                id = r.getString("idSucursal");
+            }
+            return id;
     }
     
 }
