@@ -24,7 +24,7 @@ public class Proveedores {
     
     }
 
-    public Proveedores(int idProveedor, String nombre, String telefono, String email, String direccion, String colonia, String codigoPostal, int idCiudad) {
+    public Proveedores(int idProveedor, String nombre, String telefono, String email, String direccion, String colonia, String codigoPostal, int idCiudad, String estatus) {
         this.idProveedor = idProveedor;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -33,13 +33,6 @@ public class Proveedores {
         this.colonia = colonia;
         this.codigoPostal = codigoPostal;
         this.idCiudad = idCiudad;
-    }
-
-    public String getEstatus() {
-        return estatus;
-    }
-
-    public void setEstatus(String estatus) {
         this.estatus = estatus;
     }
 
@@ -106,5 +99,13 @@ public class Proveedores {
     public void setIdCiudad(int idCiudad) {
         this.idCiudad = idCiudad;
     }
-    
+
+    public String getEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(String estatus) {
+        this.estatus = estatus;
+    }
+
 }

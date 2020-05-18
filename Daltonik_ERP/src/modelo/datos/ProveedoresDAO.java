@@ -7,12 +7,11 @@ package modelo.datos;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.Proveedores;
@@ -30,6 +29,7 @@ public class ProveedoresDAO {
     public ProveedoresDAO(String user, String pwd) {
         this.user = user;
         this.pwd = pwd;
+        cn = new ConnectURL(user, pwd);//En veces se ocupa poner las credenciales para hacer consultas XD
     }
     
     public int cantPaginas(){
@@ -64,8 +64,8 @@ public class ProveedoresDAO {
                 dato.add(r.getString(4));
                 dato.add(r.getString(5));
                 dato.add(r.getString(6));
-                dato.add(r.getInt(7));
-                dato.add(r.getString(8));
+                dato.add(r.getString(7));
+                dato.add(r.getInt(8));
                 dato.add(r.getString(9));
                 tabla.addRow(dato);
                 tDatos.setModel(tabla);
@@ -89,7 +89,7 @@ public DefaultTableModel buscarId(JTable tDatos,int id) {
                 dato.add(r.getString(4));
                 dato.add(r.getString(5));
                 dato.add(r.getString(6));
-                dato.add(r.getString(8));
+                dato.add(r.getString(7));
                 dato.add(r.getInt(8));
                 dato.add(r.getString(9));
                 tabla.addRow(dato);
@@ -115,6 +115,7 @@ public Proveedores buscarIdEdicion(int id) {
                 pv.setCodigoPostal(r.getString(7));
                 pv.setIdCiudad(r.getInt(8));
                 pv.setEstatus(r.getString(9));
+                
             }
             return pv;//jTable---jdatos
         } catch (Exception e) {
@@ -140,7 +141,7 @@ public void guardarProveedor(Proveedores pro){
 	}
     public void editarProveedor(Proveedores pro,int id){
         try {
-            cn.ejecutar("update Sucursales set nombre='"+pro.getNombre()+"', telefono='"+pro.getTelefono()
+            cn.ejecutar("update Proveedores set nombre='"+pro.getNombre()+"', telefono='"+pro.getTelefono()
                     +"', email='"+pro.getEmail()+"', direccion='"+pro.getDireccion()+"', colonia='"+pro.getColonia()+"', codigoPostal='"+pro.getCodigoPostal()+"', idCiudad='"+pro.getIdCiudad()+"', estatus='"+pro.getEstatus()+"'  where idProveedor="+id+";");
         } catch (Exception e) {
         }
@@ -166,14 +167,20 @@ public void guardarProveedor(Proveedores pro){
         return lista;
     }
     
-    public String idProEditar(String nombre) throws SQLException{
-        String id = "";
-        r = cn.consultar("select idProveedor from Proveedores where nombre = "+nombre+";");
-            if(r.next()){
-                id = r.getString("idProveedor");
+    public ArrayList<String> LlenarComboBusq(){
+        ArrayList<String> listaBusq = new ArrayList<String>();
+        
+        try {
+            r = cn.consultar("Select * from proveedores");
+            while(r.next()){
+                listaBusq.add(r.getString("nombre"));
             }
-            return id;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listaBusq;
     }
+    
 }
 
 
