@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.Sucursales;
@@ -31,6 +33,13 @@ public class SucursalesDAO {
         this.pwd = pwd;
         cn = new ConnectURL(user, pwd);
     }
+    
+    public void PruebaConexion(){
+        System.out.println("Funciona");
+        r = cn.consultar("select * from sucursales");
+        System.out.println(r);
+    }
+    
     public int cantPaginas(){
         int p=0,s=0;
         try {
@@ -165,13 +174,18 @@ public class SucursalesDAO {
         return lista;
     }
     
-    public String idSucEditar(String nombre) throws SQLException{
-        String id = "";
-        r = cn.consultar("select idSucursal from sucursales where nombre = "+nombre+";");
-            if(r.next()){
-                id = r.getString("idSucursal");
+    public ArrayList<String> LlenarComboBusq(){
+        ArrayList<String> listaBusq = new ArrayList<String>();
+        
+        try {
+            r = cn.consultar("Select * from sucursales");
+            while(r.next()){
+                listaBusq.add(r.getString("nombre"));
             }
-            return id;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProveedoresDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listaBusq;
     }
     
 }

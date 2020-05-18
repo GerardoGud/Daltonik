@@ -28,7 +28,7 @@ public class PSucursales extends javax.swing.JPanel {
     private String pwd;
     private int pagina=0;
     private int noPaginas=0;
-    public PSucursales(String user, String pwd) throws SQLException {
+    public PSucursales(String user, String pwd) {
         initComponents();
         this.user = user;
         this.pwd = pwd;
@@ -36,7 +36,14 @@ public class PSucursales extends javax.swing.JPanel {
         suc=new Sucursales();
         edit=false;
         
-        tIdSucursal.setText(""+sdao.UltimoID());
+        cargar();
+        paginar();
+        
+        try {
+            tIdSucursal.setText(""+sdao.UltimoID());
+        } catch (SQLException ex) {
+            Logger.getLogger(PSucursales.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         jComboBox1.removeAllItems();
         ArrayList<String> listaCombo = new ArrayList<String>();
@@ -45,16 +52,23 @@ public class PSucursales extends javax.swing.JPanel {
             jComboBox1.addItem(listaCombo.get(i));
         }
         
-        this.tBusqueda.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char caracter = e.getKeyChar();
-                if (((caracter < '0')
-                        || (caracter > '9'))
-                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
-                    e.consume();
-                }
-            }
-        });
+        jComboBox2.removeAllItems();
+        ArrayList<String> cbBusq = new ArrayList<String>();
+        cbBusq = sdao.LlenarComboBusq();
+        for (int i = 0; i < cbBusq.size(); i++) {
+            jComboBox2.addItem(cbBusq.get(i));
+        }
+        
+//        this.tBusqueda.addKeyListener(new KeyAdapter() {
+//            public void keyTyped(KeyEvent e) {
+//                char caracter = e.getKeyChar();
+//                if (((caracter < '0')
+//                        || (caracter > '9'))
+//                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+//                    e.consume();
+//                }
+//            }
+//        });
         this.tIdSucursal.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char caracter = e.getKeyChar();
@@ -87,12 +101,10 @@ public class PSucursales extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tDatos = new javax.swing.JTable();
         bGuardar = new javax.swing.JButton();
-        tBusqueda = new javax.swing.JTextField();
         bBuscar = new javax.swing.JButton();
         bEditar = new javax.swing.JButton();
         bEliminar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        tIdSucursal = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         tDireccion = new javax.swing.JTextField();
@@ -107,6 +119,9 @@ public class PSucursales extends javax.swing.JPanel {
         tNumPage = new javax.swing.JLabel();
         bSiguiente = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
+        tIdSucursal = new javax.swing.JLabel();
+        bRegresar = new javax.swing.JButton();
+        jComboBox2 = new javax.swing.JComboBox<>();
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -196,12 +211,6 @@ public class PSucursales extends javax.swing.JPanel {
 
         jLabel2.setText("IdSucursal");
 
-        tIdSucursal.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tIdSucursalKeyTyped(evt);
-            }
-        });
-
         jLabel4.setText("Id Sucursal");
 
         jLabel6.setText("Direccion:");
@@ -255,6 +264,10 @@ public class PSucursales extends javax.swing.JPanel {
             }
         });
 
+        bRegresar.setText("Regresar");
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -282,19 +295,21 @@ public class PSucursales extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabel2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(bBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(bBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
+                                        .addComponent(bRegresar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(bEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(bEliminar))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(tDireccion)
-                                            .addComponent(tIdSucursal)
                                             .addComponent(tTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                                            .addComponent(tNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                                            .addComponent(tNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                            .addComponent(tIdSucursal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(18, 18, 18)
@@ -304,24 +319,20 @@ public class PSucursales extends javax.swing.JPanel {
                                                     .addComponent(jLabel10))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(tCodigoPostal)
-                                                            .addComponent(tColonia))
-                                                        .addGap(112, 112, 112))
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(0, 0, Short.MAX_VALUE))))
+                                                    .addComponent(tCodigoPostal)
+                                                    .addComponent(tColonia)
+                                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(112, 112, 112))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(24, 24, 24)
                                                 .addComponent(jLabel8)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(tPresupuesto)
                                                 .addGap(111, 111, 111))))))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE))
                         .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                .addGap(178, 178, 178)
+                .addGap(192, 192, 192)
                 .addComponent(bAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tNumPage)
@@ -334,10 +345,10 @@ public class PSucursales extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tIdSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel10)
-                    .addComponent(tColonia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tColonia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tIdSucursal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,9 +373,10 @@ public class PSucursales extends javax.swing.JPanel {
                     .addComponent(chkEstatus)
                     .addComponent(bEliminar)
                     .addComponent(jLabel2)
-                    .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bBuscar)
-                    .addComponent(bEditar))
+                    .addComponent(bEditar)
+                    .addComponent(bRegresar)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -372,7 +384,7 @@ public class PSucursales extends javax.swing.JPanel {
                     .addComponent(tNumPage)
                     .addComponent(bSiguiente)
                     .addComponent(bAtras))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addGap(168, 168, 168)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -390,8 +402,7 @@ public class PSucursales extends javax.swing.JPanel {
             }
             else{
                 campos = true;
-            }
-            if(this.tTelefono.getText().length() != 10){
+                if(this.tTelefono.getText().length() != 10){
                 JOptionPane.showMessageDialog(tTelefono, "El numero de telefono no es valido");
             }
             else{
@@ -403,7 +414,8 @@ public class PSucursales extends javax.swing.JPanel {
             else{
                 vCP = true;
             }
-    
+            }
+            
         if(campos == true && vTel == true && vCP == true){
             suc=new Sucursales();
         suc.setIdSucursal(Integer.parseInt(this.tIdSucursal.getText()));
@@ -423,7 +435,11 @@ public class PSucursales extends javax.swing.JPanel {
         noPaginas=sdao.cantPaginas();
         cargar();
         paginar();
-        limpiar();
+                try {
+                    limpiar();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PSucursales.class.getName()).log(Level.SEVERE, null, ex);
+                }
         }
         try {
             tIdSucursal.setText(""+sdao.UltimoID());
@@ -438,12 +454,16 @@ public class PSucursales extends javax.swing.JPanel {
 
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
         // TODO add your handling code here:
-        this.tDatos.setModel(sdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
-        limpiar();
+        this.tDatos.setModel(sdao.buscarId(tDatos, this.jComboBox2.getSelectedIndex()+1));
+        try {
+            limpiar();
+        } catch (SQLException ex) {
+            Logger.getLogger(PSucursales.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
-        // TODO add your handling code here:
+        this.bRegresar.setVisible(false);
         if(edit) {
             edit=false;
             suc = new Sucursales();
@@ -462,12 +482,16 @@ public class PSucursales extends javax.swing.JPanel {
         }
             sdao.editarSucursal(suc, suc.getIdSucursal());
             cargar();
-            limpiar();
+            try {
+                limpiar();
+            } catch (SQLException ex) {
+                Logger.getLogger(PSucursales.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else{
             
             edit=true;
-            this.tDatos.setModel(sdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
-            suc = sdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
+            this.tDatos.setModel(sdao.buscarId(tDatos, this.jComboBox2.getSelectedIndex()+1));
+            suc = sdao.buscarIdEdicion(this.jComboBox2.getSelectedIndex()+1);
             this.tIdSucursal.setText(Integer.toString(suc.getIdSucursal()));
             this.tNombre.setText(suc.getNombre());
             this.tTelefono.setText(suc.getTelefono());
@@ -484,29 +508,24 @@ public class PSucursales extends javax.swing.JPanel {
         this.bBuscar.setVisible(!edit);
         this.bEliminar.setVisible(!edit);
         this.bGuardar.setVisible(!edit);
+        this.bRegresar.setVisible(!edit);
     }//GEN-LAST:event_bEditarActionPerformed
 
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
-        sdao.eliminarSucursal(Integer.parseInt(this.tBusqueda.getText()));
+        sdao.eliminarSucursal(this.jComboBox2.getSelectedIndex()+1);
        this.tDatos.setModel(sdao.cargarTabla(tDatos, pagina));
        noPaginas=sdao.cantPaginas();
         paginar();
-        limpiar();
+        try {
+            limpiar();
+        } catch (SQLException ex) {
+            Logger.getLogger(PSucursales.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bEliminarActionPerformed
 
     private void tDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tDireccionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tDireccionActionPerformed
-
-    private void tIdSucursalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tIdSucursalKeyTyped
-        char validar = evt.getKeyChar();
-        if(Character.isLetter(validar)){
-            getToolkit().beep();
-            evt.consume();
-            
-            JOptionPane.showMessageDialog(tIdSucursal, "Caracter no valido");
-        }
-    }//GEN-LAST:event_tIdSucursalKeyTyped
 
     private void tTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tTelefonoKeyTyped
         char validar = evt.getKeyChar();
@@ -558,10 +577,10 @@ public class PSucursales extends javax.swing.JPanel {
     public void cargar() {
         this.tDatos.setModel(sdao.cargarTabla(tDatos, pagina));
     }
-    public void limpiar(){
+    public void limpiar() throws SQLException{
         this.tTelefono.setText("");
         this.tNombre.setText("");
-        this.tIdSucursal.setText("");
+        this.tIdSucursal.setText(""+sdao.UltimoID());
         this.tColonia.setText("");
         this.tCodigoPostal.setText("");
         this.tDireccion.setText("");
@@ -591,9 +610,11 @@ public class PSucursales extends javax.swing.JPanel {
     private javax.swing.JButton bEditar;
     private javax.swing.JButton bEliminar;
     private javax.swing.JButton bGuardar;
+    private javax.swing.JButton bRegresar;
     private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -605,12 +626,11 @@ public class PSucursales extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField tBusqueda;
     private javax.swing.JTextField tCodigoPostal;
     private javax.swing.JTextField tColonia;
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tDireccion;
-    private javax.swing.JTextField tIdSucursal;
+    private javax.swing.JLabel tIdSucursal;
     private javax.swing.JTextField tNombre;
     private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tPresupuesto;
