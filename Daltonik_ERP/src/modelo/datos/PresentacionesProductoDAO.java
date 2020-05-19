@@ -8,9 +8,12 @@ package modelo.datos;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import modelo.beans.ConsultaEmpaque;
+import modelo.beans.ConsultaProductos;
 import modelo.beans.Empaque;
 import modelo.beans.PresentacionesProducto;
 import static modelo.datos.EmpaqueDAO.r;
@@ -94,7 +97,38 @@ public class PresentacionesProductoDAO {
             return null;
         }
     }
-
+public ArrayList<ConsultaProductos> consultarProd() {
+         ArrayList<ConsultaProductos> pr = new  ArrayList<ConsultaProductos>();
+         ConsultaProductos c;
+        try {
+            r = cn.consultar("select idProducto,nombre from Productos;");
+            while (r.next()) {
+                c=new ConsultaProductos();
+                c.setId(r.getInt(1));
+                c.setNombre(r.getString(2));
+                pr.add(c);
+            }
+            return pr;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+    }
+public ArrayList<ConsultaEmpaque> consultarEmp() {
+         ArrayList<ConsultaEmpaque> pr = new  ArrayList<ConsultaEmpaque>();
+         ConsultaEmpaque c;
+        try {
+            r = cn.consultar("select idEmpaque,nombre from Empaques;");
+            while (r.next()) {
+                c=new ConsultaEmpaque();
+                c.setId(r.getInt(1));
+                c.setNombre(r.getString(2));
+                pr.add(c);
+            }
+            return pr;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+    }
     public PresentacionesProducto buscarIdEdicion(int id) {
         PresentacionesProducto pr = new PresentacionesProducto();
         try {
@@ -106,6 +140,7 @@ public class PresentacionesProductoDAO {
                 pr.setPuntoReorden(r.getFloat(4));
                 pr.setIdProducto(r.getInt(5));
                 pr.setIdEmpaque(r.getInt(6));
+                pr.setEstatus(r.getString(7));
             }
             return pr;//jTable---jdatos
         } catch (Exception e) {
@@ -115,8 +150,8 @@ public class PresentacionesProductoDAO {
 
     public void guardarPresentacionesProducto(PresentacionesProducto pr) {
         try {
-            cn.ejecutar("INSERT INTO PresentacionesProducto VALUES (" + pr.getIdPresentacion() + ",'" + pr.getPrecioCompra()
-                    + "'," + pr.getPrecioVenta() + ",'" + pr.getPuntoReorden() + "'," + pr.getIdProducto() + "'," + pr.getIdEmpaque() + ",'"+pr.getEstatus()+"');");
+            cn.ejecutar("INSERT INTO PresentacionesProducto VALUES (" + pr.getIdPresentacion() + "," + pr.getPrecioCompra()
+                    + "," + pr.getPrecioVenta() + "," + pr.getPuntoReorden() + "," + pr.getIdProducto() + "," + pr.getIdEmpaque() + ",'"+pr.getEstatus()+"');");
         } catch (Exception e) {
         }
     }
@@ -124,7 +159,7 @@ public class PresentacionesProductoDAO {
 		int idPresentacionesProductoU = 1;
 		String sql = "select max(idPresentacion)+1 idPresentacion from PresentacionesProducto";
 		try {
-			cn.ejecutar(sql);
+			r=cn.consultar(sql);
 			if(r.next()) {
 				idPresentacionesProductoU=r.getInt("idPresentacion");
 			}
@@ -136,8 +171,8 @@ public class PresentacionesProductoDAO {
 	}
     public void editarPresentacionesProducto(PresentacionesProducto pr, int id) {
         try {
-            cn.ejecutar("update PresentacionesProducto set puntoReorden=" + pr.getPuntoReorden() + ", precioCompra='" + pr.getPrecioCompra()
-                    + "',precioVenta='" + pr.getPrecioVenta() + "', idProducto=" + pr.getIdProducto() + "',idEmpaque='" + pr.getIdEmpaque() + "',estatus='"+pr.getEstatus()+"' where idPresentacion=" + id + ";");
+            cn.ejecutar("update PresentacionesProducto set puntoReorden=" + pr.getPuntoReorden() + ", precioCompra=" + pr.getPrecioCompra()
+                    + ",precioVenta=" + pr.getPrecioVenta() + ", idProducto=" + pr.getIdProducto() + ",idEmpaque=" + pr.getIdEmpaque() + ",estatus='"+pr.getEstatus()+"' where idPresentacion=" + id + ";");
         } catch (Exception e) {
         }
     }

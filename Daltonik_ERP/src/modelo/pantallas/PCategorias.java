@@ -47,16 +47,7 @@ public class PCategorias extends javax.swing.JPanel {
                 }
             }
         });
-        this.tCategoria.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char caracter = e.getKeyChar();
-                if (((caracter < '0')
-                        || (caracter > '9'))
-                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
-                    e.consume();
-                }
-            }
-        });
+        
     }
     
 
@@ -69,11 +60,9 @@ public class PCategorias extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tCategoria = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         tNombre = new javax.swing.JTextField();
         chkEstatus = new javax.swing.JCheckBox();
-        jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tDatos = new javax.swing.JTable();
@@ -85,17 +74,6 @@ public class PCategorias extends javax.swing.JPanel {
         tNumPage = new javax.swing.JLabel();
         bSiguiente = new javax.swing.JButton();
         bAtras = new javax.swing.JButton();
-
-        tCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tCategoriaActionPerformed(evt);
-            }
-        });
-        tCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tCategoriaKeyTyped(evt);
-            }
-        });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -111,9 +89,6 @@ public class PCategorias extends javax.swing.JPanel {
                 chkEstatusActionPerformed(evt);
             }
         });
-
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel3.setText("idCategoria:");
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("nombre:");
@@ -202,14 +177,10 @@ public class PCategorias extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(tCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(chkEstatus))
                                 .addGap(36, 36, 36)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,20 +209,21 @@ public class PCategorias extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(bGuardar))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(bGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bBuscar)
+                            .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkEstatus)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(bBuscar)
-                    .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bEditar)
-                    .addComponent(chkEstatus))
+                .addComponent(bEditar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bEliminar)
                 .addGap(18, 18, 18)
@@ -273,7 +245,7 @@ public class PCategorias extends javax.swing.JPanel {
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
         cat = new Categorias();
         cat.setNombre(this.tNombre.getText());
-        cat.setIdCategoria(Integer.parseInt(this.tCategoria.getText()));
+        cat.setIdCategoria(cdao.UltimoID());
         if (this.chkEstatus.isSelected()) {
             cat.setEstatus("A");
         } else {
@@ -316,7 +288,6 @@ public class PCategorias extends javax.swing.JPanel {
             this.tDatos.setModel(cdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
             cat = cdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
             this.tNombre.setText(cat.getNombre());
-            this.tCategoria.setText(String.valueOf(cat.getIdCategoria()));
             if (cat.getEstatus().equals("A")) {
                 this.chkEstatus.setSelected(true);
             } else {
@@ -352,21 +323,6 @@ public class PCategorias extends javax.swing.JPanel {
         cargar();
     }//GEN-LAST:event_bAtrasActionPerformed
 
-    private void tCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCategoriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tCategoriaActionPerformed
-
-    private void tCategoriaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tCategoriaKeyTyped
-        // TODO add your handling code here:
-        char validar = evt.getKeyChar();
-        if(Character.isLetter(validar)){
-            getToolkit().beep();
-            evt.consume();
-            
-            JOptionPane.showMessageDialog(tCategoria, "Caracter no valido");
-        }
-    }//GEN-LAST:event_tCategoriaKeyTyped
-
     private void tBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tBusquedaKeyTyped
         // TODO add your handling code here:
          char validar = evt.getKeyChar();
@@ -382,7 +338,6 @@ public class PCategorias extends javax.swing.JPanel {
     }
 
     public void Limpiar() {
-        this.tCategoria.setText("");
         this.tNombre.setText("");
         this.tBusqueda.setText("");
     }
@@ -409,11 +364,9 @@ public class PCategorias extends javax.swing.JPanel {
     private javax.swing.JButton bSiguiente;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField tBusqueda;
-    private javax.swing.JTextField tCategoria;
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tNombre;
     private javax.swing.JLabel tNumPage;
