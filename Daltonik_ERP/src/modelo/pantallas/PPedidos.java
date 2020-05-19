@@ -4,9 +4,14 @@
  * and open the tplate in the editor.
  */
 package modelo.pantallas;
+import daltonik_erp.Archivos;
+import daltonik_erp.Excel;
+import java.io.IOException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import modelo.beans.DProveedor;
 import modelo.beans.DSucursal;
@@ -113,13 +118,14 @@ public class PPedidos extends javax.swing.JPanel {
         bGuardar = new javax.swing.JButton();
         tRecepcion = new javax.swing.JTextField();
         tBusqueda = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        tMensajes = new javax.swing.JLabel();
         bBuscar = new javax.swing.JButton();
         bEditar = new javax.swing.JButton();
         tEmpleado = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         cProveedor = new javax.swing.JComboBox<>();
         cSucursal = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         bEliminar.setText("Eliminar");
         bEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +211,7 @@ public class PPedidos extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        tMensajes.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         bBuscar.setText("Buscar");
         bBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -243,13 +249,20 @@ public class PPedidos extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setText("Generar Reporte de Excel");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tMensajes, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -268,7 +281,8 @@ public class PPedidos extends javax.swing.JPanel {
                             .addComponent(tEmpleado)
                             .addComponent(cProveedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cSucursal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,10 +316,11 @@ public class PPedidos extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(tRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -344,7 +359,7 @@ public class PPedidos extends javax.swing.JPanel {
                     .addComponent(bSiguiente)
                     .addComponent(bAtras))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tMensajes, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -499,6 +514,30 @@ public class PPedidos extends javax.swing.JPanel {
         // TODO add your handling code here:
         suSelected=this.cSucursal.getSelectedIndex();
     }//GEN-LAST:event_cSucursalItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.tMensajes.setText("Generando reporte");
+        String ruta="";
+        String fecha="";
+        String con;
+        Archivos arc=new Archivos();
+        con=JOptionPane.showInputDialog(this, "Introduzca el nombre del archivo", "Reporte Excel", JOptionPane.WARNING_MESSAGE);
+        try{
+            Date sistFecha=new Date();
+            SimpleDateFormat formato=new SimpleDateFormat("dd MMMMM YYYY");
+            fecha=formato.format(sistFecha);
+            ruta=arc.cargarConfig()+con+fecha+".xlsx";
+            Excel ex=new Excel(ruta);
+            ex.crearExcel();
+            ex.modificar();
+            this.tMensajes.setText("Reporte "+ruta+ " se ha creado");
+        }catch(NullPointerException e){
+            this.tMensajes.setText(e.getMessage());
+        } catch (IOException ex) {
+            this.tMensajes.setText(ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 private int buscarPr(int id){
     int idx=-1;
     for (int i = 0; i < reg.size(); i++) {
@@ -562,7 +601,7 @@ private int buscarSu(int id){
     private javax.swing.JComboBox<String> cProveedor;
     private javax.swing.JComboBox<String> cSucursal;
     private javax.swing.JCheckBox chkEstatus;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -573,6 +612,7 @@ private int buscarSu(int id){
     private javax.swing.JTextField tBusqueda;
     private javax.swing.JTable tDatos;
     private javax.swing.JTextField tEmpleado;
+    private javax.swing.JLabel tMensajes;
     private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tRecepcion;
     private javax.swing.JTextField tRegistro;

@@ -45,6 +45,19 @@ private String extencion;
             } 
             return code;
     }
+    public String cargarConfig(){
+        Archivos arc = new Archivos();
+        arc.setNombre("Configuracion");
+        arc.setExtencion(".daltonik");
+        arc.setArchivoRuta("C:\\Daltonik\\");
+        Scanner n=arc.AbrirArc();
+        String nomb=n.nextLine();
+        String nomSe=n.nextLine();
+        String nPuer=n.nextLine();
+        String ruta=n.nextLine();
+        n.close();
+        return ruta;
+    }
     public Scanner AbrirArc(){
             File file = new File(archivoRuta+nombre+extencion);
             getnombre();

@@ -20,7 +20,9 @@ public class ConnectURL {
             user = usr;
             pwd = pw;
     }
-    
+    public Connection getConexion(){
+        return usu;
+    }
     private static Connection conectar(){
         String url="jdbc:sqlserver://localhost:1433;databaseName=ERP2020";
         try {

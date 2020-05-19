@@ -23,6 +23,7 @@ import modelo.pantallas.PPedidoDetalle;
 import modelo.pantallas.PPedidos;
 import modelo.pantallas.PPresentacionesProducto;
 import modelo.pantallas.PProductos;
+import modelo.pantallas.PProveedor;
 import modelo.pantallas.PSucursales;
 import modelo.pantallas.PTiposUsuario;
 import modelo.pantallas.PUsuario;
@@ -582,8 +583,8 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_mExistenciasActionPerformed
 
     private void mProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mProveedoresActionPerformed
-        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
-                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+        PProveedor pv=new PProveedor(user,pwd);
+        this.Pantallas.add("Proveedores",pv);
     }//GEN-LAST:event_mProveedoresActionPerformed
 
     private void mCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCuentasActionPerformed

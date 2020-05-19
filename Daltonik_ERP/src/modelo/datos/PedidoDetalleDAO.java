@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.PedidoDetalle;
@@ -70,11 +71,11 @@ public class PedidoDetalleDAO {
             return null;
         }
     }
-    public DefaultTableModel cargarTabla(JTable tDatos) {
+    public DefaultTableModel cargarId(JTable tDatos, int id) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from PedidoDetalle where estatus = 'A'");
+            r = cn.consultar("select * from PedidoDetalle where idPedidoDetalle="+id);
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -95,7 +96,7 @@ public class PedidoDetalleDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from PedidoDetalle where idPedido="+id+";");
+            r = cn.consultar("select * from PedidoDetalle where idPedido="+id+" and  estatus = 'A'");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -136,7 +137,7 @@ public class PedidoDetalleDAO {
         public PedidoDetalle buscarIdEdicion(int id) {
         PedidoDetalle pd=new PedidoDetalle();
         try {
-            r = cn.consultar("select * from PedidoDetalle where idSucursal="+id+";");
+            r = cn.consultar("select * from PedidoDetalle where idPedidoDetalle="+id+";");
             while (r.next()) {
                 pd.setIdPedidoDetalle(r.getInt(1));
                 pd.setCantidadPedida(r.getInt(2));
@@ -197,11 +198,11 @@ public class PedidoDetalleDAO {
 		int idPedidos = 1;
 		String sql = "select idProveedor from Pedidos where idPedido="+id;
 		try {
-			cn.ejecutar(sql);
+			r=cn.consultar(sql);
 			if(r.next()) {
 				idPedidos=r.getInt("idProveedor");
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -210,8 +211,8 @@ public class PedidoDetalleDAO {
     public void editarPedidoDetalle(PedidoDetalle pd,int id){
         try {
             cn.ejecutar("update PedidoDetalle set cantPedida="+pd.getCantidadPedida()+",PrecioCompra="+
-                    pd.getPrecioCompra()+",Subtotal="+pd.getSubtotal()+",CantRecibida="+pd.getCantRecibida()+",CabtRechazada="+pd.getCantRechazada()
-                    +",CantAceptada="+pd.getCantAceptada()+",IdPresentacion="+pd.getIdPresentacion()+",'"+pd.getEstatus()
+                    pd.getPrecioCompra()+",Subtotal="+pd.getSubtotal()+",CantRecibida="+pd.getCantRecibida()+",CantRechazada="+pd.getCantRechazada()
+                    +",CantAceptada="+pd.getCantAceptada()+",IdPresentacion="+pd.getIdPresentacion()+",Estatus='"+pd.getEstatus()
                     +"'  where idPedidoDetalle="+id+";");
         } catch (Exception e) {
         }
@@ -224,7 +225,16 @@ public class PedidoDetalleDAO {
     }
     public void eliminarPedidoDetalle(int id){
         try {
-            cn.ejecutar("update PedidoDetalle set estatus='I' where idPedidoDetalle="+id+";");
+            String sql = "select estatus from Pedidos where idPedido= (select idPedido from PedidoDetalle where idPedidoDetalle="+id+")";
+            r=cn.consultar(sql);
+			if(r.next()) {
+				sql=r.getString("estatus");
+			}
+                        if(sql.equals("A")){
+                            cn.ejecutar("delete PedidoDetalle where idPedidoDetalle="+id+";");
+                        }else{
+                            JOptionPane.showConfirmDialog(null,"No se puede eliminar", "Pedido inactivo",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+                        }
         } catch (Exception e) {
         }
     }

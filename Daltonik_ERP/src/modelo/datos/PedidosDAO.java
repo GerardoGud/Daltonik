@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import modelo.RegPedido;
 import modelo.beans.DProveedor;
 import modelo.beans.DSucursal;
 import modelo.beans.Pedidos;
@@ -159,7 +160,30 @@ public class PedidosDAO {
 //        }
 //        return listaBusq;
 //    }
-    
+     public ArrayList<RegPedido> Imprimir() {
+        ArrayList<RegPedido> pd=new ArrayList<>();
+        try {
+            r = cn.consultar("select p.idPedido, p.fechaRegistro,p.fechaRecepcion,p.totalPagar,p.cantidadPagada, \n" +
+            "p.estatus, v.nombre Proveedor, s.nombre Sucursal, p.idEmpleado from pedidos p join Proveedores v on \n" +
+            "v.idProveedor=p.idProveedor join Sucursales s on p.idSucursal=s.idSucursal;");
+            while (r.next()) {
+                RegPedido p=new RegPedido();
+                p.setIdPedido(r.getInt(1));
+                p.setFechaRegistro(r.getString(2));
+                p.setFechaRecepcion(r.getString(3));
+                p.setTotalPagar(r.getDouble(4));
+                p.setCantidadPagada(r.getDouble(5));
+                p.setEstatus(r.getString(6));
+                p.setProveedor(r.getString(7));
+                p.setSucursal(r.getString(8));
+                p.setIdEmpleado(r.getInt(9));
+                pd.add(p);
+            }
+            return pd;//jTable---jdatos
+        } catch (SQLException e) {
+            return null;
+        }
+        }   
     public ArrayList<DProveedor> buscarProveedores() {
         ArrayList<DProveedor> p=new ArrayList<DProveedor>();
         try {

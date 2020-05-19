@@ -31,7 +31,7 @@ public class PProveedor extends javax.swing.JPanel {
     private final String pwd;
     private int pagina=0;
     private int noPaginas=0;
-    public PProveedor(String user, String pwd) throws SQLException {
+    public PProveedor(String user, String pwd){
         initComponents();
         this.user = user;
         this.pwd = pwd;
@@ -42,7 +42,11 @@ public class PProveedor extends javax.swing.JPanel {
 //      
         cargar();
         paginar();
-        this.tIdProveedor.setText(""+pdao.UltimoID());
+        try {
+            this.tIdProveedor.setText(""+pdao.UltimoID());
+        } catch (SQLException ex) {
+            Logger.getLogger(PProveedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         jComboBox1.removeAllItems();
         ArrayList<String> listaCombo = new ArrayList<String>();

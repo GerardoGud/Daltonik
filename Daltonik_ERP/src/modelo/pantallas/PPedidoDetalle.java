@@ -5,7 +5,10 @@
  */
 package modelo.pantallas;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modelo.beans.PedidoDetalle;
 import modelo.beans.RegistroCompra;
 import modelo.datos.PedidoDetalleDAO;
@@ -46,6 +49,36 @@ public class PPedidoDetalle extends javax.swing.JPanel {
         paginar();
         edit = false;
         this.tIdPedido.setText(idPedidos+"");
+        this.tBusqueda.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tIdPedido.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tCantidad.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
     }
 
     /**
@@ -108,6 +141,7 @@ public class PPedidoDetalle extends javax.swing.JPanel {
 
         jLabel1.setText("Producto");
 
+        chkEstatus.setSelected(true);
         chkEstatus.setText("Estatus");
 
         bBuscar.setText("Buscar");
@@ -254,74 +288,98 @@ public class PPedidoDetalle extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
-        p = new PedidoDetalle();
-        p.setIdPedidoDetalle(pdao.UltimoIDPedidoDetalle());
-        p.setCantidadPedida(Integer.parseInt(this.tCantidad.getText()));
-        p.setPrecioCompra(this.reg.get(prodSelected).getPrecio());
-        p.setSubtotal(Integer.parseInt(this.tCantidad.getText())*this.reg.get(prodSelected).getPrecio());
-        p.setCantRecibida(0);
-        p.setCantRechazada(0);
-        p.setCantAceptada(0);
-        System.out.println(idPedidos);
-        p.setIdPedido(idPedidos);
-        System.out.println(this.reg.get(prodSelected).getIdPresentacion());
-        int x=this.reg.get(prodSelected).getIdPresentacion();
-        p.setIdPresentacion(x);
-        p.setEstatus("A");
-        pdao.guardarPedidoDetalle(p);
-        pdao.actualizarTotalPedido(idPedidos);
-        cargar();
+        if (this.tCantidad.getText().equals("") || this.tIdPedido.getText().equals("")) {
+            JOptionPane.showConfirmDialog(this, "Necesita ingresar un valor de busqueda", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+        } else {
+            p = new PedidoDetalle();
+            p.setIdPedidoDetalle(pdao.UltimoIDPedidoDetalle());
+            p.setCantidadPedida(Integer.parseInt(this.tCantidad.getText()));
+            p.setPrecioCompra(this.reg.get(prodSelected).getPrecio());
+            p.setSubtotal(Integer.parseInt(this.tCantidad.getText()) * this.reg.get(prodSelected).getPrecio());
+            p.setCantRecibida(0);
+            p.setCantRechazada(0);
+            p.setCantAceptada(0);
+            p.setIdPedido(idPedidos);
+            int x = this.reg.get(prodSelected).getIdPresentacion();
+            p.setIdPresentacion(x);
+            p.setEstatus("A");
+            pdao.guardarPedidoDetalle(p);
+            pdao.actualizarTotalPedido(idPedidos);
+            this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tIdPedido.getText())));
+            cargar();
+        }
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
         // TODO add your handling code here:
-        this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+        if(this.tBusqueda.getText().equals("")){
+            JOptionPane.showConfirmDialog(this, "Necesita ingresar un valor de busqueda","Error",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+        } else {
+            this.tDatos.setModel(pdao.cargarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+        }
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
-//        if (edit) {
-//            edit=false;
-//            p = new PedidoDetalle();
-//            p.setIdPedidoDetalle(r.getInt(1));
-//            p.setCantidadPedida(r.getInt(2));
-//            p.setPrecioCompra(r.getDouble(3));
-//            p.setSubtotal(r.getDouble(4));
-//            p.setCantRecibida(r.getInt(5));
-//            p.setCantRechazada(r.getInt(6));
-//            p.setCantAceptada(r.getDouble(7));
-//            p.setIdPedido(r.getInt(8));
-//            p.setIdPresentacion(r.getInt(9));
-//            p.setEstatus(r.getString(10));
-//            if (this.chkEstatus.isSelected()) {
-//                p.setEstatus("A");
-//            } else {
-//                p.setEstatus("I");
-//            }
-//            pdao.editarPedidoDetalle(p, p.getIdPedidoDetalle());
-//            cargar();
-//        } else {
-//            edit = true;
-//            this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
-//            p = pdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
-//            this.tCantidad.setText(String.valueOf(p.getIdPedidoDetalle()));
-//            hhh
-//            if (p.getEstatus().equals("A")) {
-//                this.chkEstatus.setSelected(true);
-//            } else {
-//                this.chkEstatus.setSelected(false);
-//            }
-//        }
-//        this.bBuscar.setVisible(!edit);
-//        this.bEliminar.setVisible(!edit);
-//        this.bGuardar.setVisible(!edit);
+        if (edit) {
+            if(this.tCantidad.getText().equals("")||this.tIdPedido.getText().equals("")){
+                JOptionPane.showConfirmDialog(this, "Necesita ingresar un valor de busqueda","Error",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+            }else{
+                edit = false;
+                this.tBusqueda.setEnabled(!edit);
+                this.tIdPedido.setEnabled(!edit);
+                p.setIdPedidoDetalle(Integer.parseInt(this.tBusqueda.getText()));
+                p.setCantidadPedida(Integer.parseInt(this.tCantidad.getText()));
+                p.setPrecioCompra(this.reg.get(prodSelected).getPrecio());
+                p.setSubtotal(Integer.parseInt(this.tCantidad.getText()) * this.reg.get(prodSelected).getPrecio());
+                p.setCantRecibida(0);
+                p.setCantRechazada(0);
+                p.setCantAceptada(0);
+                p.setIdPedido(idPedidos);
+                if (this.chkEstatus.isSelected()) {
+                    p.setEstatus("A");
+                } else {
+                    p.setEstatus("I");
+                }
+                pdao.editarPedidoDetalle(p, p.getIdPedidoDetalle());
+                pdao.actualizarTotalPedido(idPedidos);
+                this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tIdPedido.getText())));
+                cargar();
+            }
+        } else {
+            edit = true;
+            this.tBusqueda.setEnabled(!edit);
+            this.tDatos.setModel(pdao.cargarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+            p = pdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
+            this.tIdPedido.setText(String.valueOf(p.getIdPedido()));
+            this.idProveedor=pdao.ProveedorPedido(Integer.parseInt(this.tIdPedido.getText()));
+            cargar();
+            this.tCantidad.setText(p.getCantidadPedida()+"");
+            this.tIdPedido.setEnabled(!edit);
+            if (p.getEstatus().equals("A")) {
+                this.chkEstatus.setSelected(true);
+            } else {
+                this.chkEstatus.setSelected(false);
+            }
+            this.CProducto.setSelectedIndex(this.buscarPr(p.getIdPresentacion()));
+        }
+        this.bBuscar.setVisible(!edit);
+        this.bEliminar.setVisible(!edit);
+        this.bGuardar.setVisible(!edit);
     }//GEN-LAST:event_bEditarActionPerformed
 
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
-        pdao.eliminarPedidoDetalle(Integer.parseInt(this.tBusqueda.getText()));
-        cargar();
-        Limpiar();
+        if(this.tBusqueda.getText().equals("")){
+            JOptionPane.showConfirmDialog(this, "Necesita ingresar un valor de busqueda","Error",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+        } else {
+            p = pdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
+            this.tIdPedido.setText(String.valueOf(p.getIdPedido()));
+            pdao.eliminarPedidoDetalle(Integer.parseInt(this.tBusqueda.getText()));
+            pdao.actualizarTotalPedido(idPedidos);
+            cargar();
+            Limpiar();
+        }
     }//GEN-LAST:event_bEliminarActionPerformed
 
     private void bSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSiguienteActionPerformed
@@ -343,12 +401,16 @@ public class PPedidoDetalle extends javax.swing.JPanel {
     }//GEN-LAST:event_CProductoItemStateChanged
 
     private void bBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscar1ActionPerformed
-        this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tIdPedido.getText())));
-        this.idProveedor=pdao.ProveedorPedido(Integer.parseInt(this.tIdPedido.getText()));
-        cargar();
+        if(this.tIdPedido.getText().equals("")){
+            JOptionPane.showConfirmDialog(this, "Necesita ingresar un valor de busqueda","Error",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+        } else {
+            this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tIdPedido.getText())));
+            this.idProveedor = pdao.ProveedorPedido(Integer.parseInt(this.tIdPedido.getText()));
+            this.idPedidos = Integer.parseInt(this.tIdPedido.getText());
+            cargar();
+        }
     }//GEN-LAST:event_bBuscar1ActionPerformed
     public void cargar() {
-        this.tDatos.setModel(pdao.cargarTabla(tDatos,pagina));
         reg=new ArrayList();
         reg=pdao.buscarProductosProveedor(idProveedor);
         CProducto.removeAllItems();
@@ -357,6 +419,13 @@ public class PPedidoDetalle extends javax.swing.JPanel {
         }
         this.repaint();
     }
+    private int buscarPr(int id){
+    int idx=-1;
+    for (int i = 0; i < reg.size(); i++) {
+        if(reg.get(i).getIdPresentacion()==id)return i;
+    }
+    return idx;
+}
     public void paginar(){
         if(pagina==0){
             this.bAtras.setVisible(false);
@@ -372,7 +441,7 @@ public class PPedidoDetalle extends javax.swing.JPanel {
     }
     public void Limpiar() {
         this.tCantidad.setText("");
-            this.tIdPedido.setText("");
+        this.tIdPedido.setText("");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CProducto;
