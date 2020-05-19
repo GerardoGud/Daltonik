@@ -1,13 +1,16 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this tplate file, choose Tools | Tplates
+ * and open the tplate in the editor.
  */
 package modelo.pantallas;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modelo.beans.DProveedor;
+import modelo.beans.DSucursal;
 import modelo.beans.Pedidos;
-import modelo.beans.RegistroCompra;
 import modelo.datos.PedidosDAO;
 /**
  *
@@ -24,7 +27,10 @@ public class PPedidos extends javax.swing.JPanel {
     private int idPedidos=0;
     private int idProveedor=0;
     private int proSelected=0;
+    private int idSucursal=0;
+    private int suSelected=0;
     ArrayList<DProveedor> reg;
+    ArrayList<DSucursal> regS;
     /**
      * Creates new form PPedidos
      */
@@ -38,6 +44,48 @@ public class PPedidos extends javax.swing.JPanel {
         cargar();
         paginar();
         edit = false;
+        
+        
+        this.tBusqueda.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
+        this.tRecepcion.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)&&(caracter!='-')) {
+                    e.consume();
+                }
+            }
+        });
+        this.tRegistro.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)&& (caracter!='-'))  {
+                    e.consume();
+                }
+            }
+        });
+        this.tEmpleado.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+                if (((caracter < '0')
+                        || (caracter > '9'))
+                        && (caracter != KeyEvent.VK_BACK_SPACE)) {
+                    e.consume();
+                }
+            }
+        });
     }
 
     /**
@@ -49,7 +97,6 @@ public class PPedidos extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tSucursal = new javax.swing.JTextField();
         bEliminar = new javax.swing.JButton();
         chkEstatus = new javax.swing.JCheckBox();
         jLabel2 = new javax.swing.JLabel();
@@ -72,6 +119,7 @@ public class PPedidos extends javax.swing.JPanel {
         tEmpleado = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         cProveedor = new javax.swing.JComboBox<>();
+        cSucursal = new javax.swing.JComboBox<>();
 
         bEliminar.setText("Eliminar");
         bEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -110,17 +158,18 @@ public class PPedidos extends javax.swing.JPanel {
 
         tDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "idEmpaque", "Nombre", "Capacidad", "Estatus", "idUnidadMedida"
+                "idPedido", "Fecha Registro", "Fecha Recepción", "Total a Pagar", "Cantidad Pagada", "Estatus"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -187,6 +236,13 @@ public class PPedidos extends javax.swing.JPanel {
             }
         });
 
+        cSucursal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cSucursal.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cSucursalItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -207,11 +263,11 @@ public class PPedidos extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(bGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                            .addComponent(tSucursal, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(tRecepcion, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(tRegistro, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(tEmpleado)
-                            .addComponent(cProveedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cProveedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cSucursal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -228,14 +284,14 @@ public class PPedidos extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
-                                .addComponent(chkEstatus))
-                            .addComponent(bBuscar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(chkEstatus)))
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(bEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(bEliminar))))
@@ -244,42 +300,45 @@ public class PPedidos extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(tRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(cProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bGuardar)
-                .addGap(18, 64, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(tRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(cProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(cSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bEditar)
                             .addComponent(bBuscar))
                         .addGap(29, 29, 29))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2)
-                        .addComponent(bEliminar)
-                        .addComponent(chkEstatus)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(bEliminar)
+                            .addComponent(chkEstatus))))
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tNumPage)
                     .addComponent(bSiguiente)
@@ -291,8 +350,11 @@ public class PPedidos extends javax.swing.JPanel {
 
     private void bEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminarActionPerformed
         // TODO add your handling code here:
-        pdao.eliminarPedidos(Integer.parseInt(this.tBusqueda.getText()));
-        noPaginas=pdao.cantPaginas();
+        int x=JOptionPane.showConfirmDialog(this, "Estas seguro de que deseas borrar este registro?", "Alerta",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+        if(x==JOptionPane.YES_OPTION){
+            pdao.eliminarPedidos(Integer.parseInt(this.tBusqueda.getText()));
+            noPaginas=pdao.cantPaginas();
+        }        
         cargar();
         paginar();
         limpiar();
@@ -321,66 +383,102 @@ public class PPedidos extends javax.swing.JPanel {
     }//GEN-LAST:event_bAtrasActionPerformed
 
     private void bGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGuardarActionPerformed
-        p=new Pedidos();
-        idPedidos=pdao.UltimoIDPedidos();
-        idProveedor=reg.get(proSelected).getIdProveedor();
-        p.setIdPedido(idPedidos);
-        p.setFechaRegistro(this.tRegistro.getText());
-        p.setFechaRecepcion(this.tRecepcion.getText());
-        p.setTotalPagar(0);
-        p.setCantidadPagada(0);
-        p.setEstatus("A");
-        p.setIdProveedor(idProveedor);
-        p.setIdSucursal(Integer.parseInt(this.tSucursal.getText()));
-        p.setIdEmpleado(Integer.parseInt(this.tEmpleado.getText()));
-        pdao.guardarPedidos(p);
-        noPaginas=pdao.cantPaginas();
-        cargar();
-        paginar();
-        limpiar();
+        boolean fechReg = false;
+        boolean fechRec = false;
+        boolean prov = false;
+        boolean idSuc = false;
+        boolean idEmp = false;
+        if (this.tRegistro.getText().equals("") || this.tRecepcion.getText().equals("")|| this.tEmpleado.getText().equals("")) {
+            JOptionPane.showConfirmDialog(this, "Hay un error, favor de verificar","error",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+        } else {
+            fechReg = true;
+            if (this.tRegistro.getText().length() != 10) {
+                JOptionPane.showMessageDialog(tRegistro, "No es válido, hacen falta dígitos");
+            } else {
+                fechRec = true;
+            }
+            p = new Pedidos();
+            idPedidos = pdao.UltimoIDPedidos();
+            idProveedor = reg.get(proSelected).getIdProveedor();
+            idSucursal = regS.get(suSelected).getIdSucursal();
+            p.setIdPedido(idPedidos);
+            p.setFechaRegistro(this.tRegistro.getText());
+            p.setFechaRecepcion(this.tRecepcion.getText());
+            p.setTotalPagar(0);
+            p.setCantidadPagada(0);
+            p.setEstatus("A");
+            p.setIdProveedor(idProveedor);
+            p.setIdSucursal(idSucursal);
+            p.setIdEmpleado(Integer.parseInt(this.tEmpleado.getText()));
+            pdao.guardarPedidos(p);
+            noPaginas = pdao.cantPaginas();
+            cargar();
+            paginar();
+            limpiar();
+        }
     }//GEN-LAST:event_bGuardarActionPerformed
 
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
         // TODO add your handling code here:
-        this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
-        limpiar();
+        if (this.tBusqueda.getText().equals("")) {
+            JOptionPane.showConfirmDialog(this, "necesita introducir el id del pedido para realizar la busqueda", "error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+        } else {
+            this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+            limpiar();
+        }
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void bEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditarActionPerformed
         // TODO add your handling code here:
-//        if(edit) {
-//            edit=false;
-//            p = new Empaque();
-//            emp.setIdUnidad(Integer.parseInt(this.tBusqueda.getText()));
-//            emp.setCapacidad(Double.parseDouble(this.tCapacidad.getText()));
-//            emp.setNombre(this.tRecepcion.getText());
-//            emp.setIdUnidad(Integer.parseInt(this.tSucursal.getText()));
-//            if (this.chkEstatus.isSelected()) {
-//                emp.setEstatus("A");
-//            } else {
-//                emp.setEstatus("I");
-//            }
-//            edao.editarEmpaque(emp, emp.getIdEmpaque());
-//            noPaginas=edao.cantPaginas();
-//            cargar();
-//            paginar();
-//            limpiar();
-//        }else{
-//            edit=true;
-//            this.tDatos.setModel(edao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
-//            emp = edao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
-//            this.tRecepcion.setText(emp.getNombre());
-//            this.tCapacidad.setText(String.valueOf(emp.getCapacidad()));
-//            this.tSucursal.setText(String.valueOf(emp.getIdUnidad()));
-//            if (emp.getEstatus().equals("A")) {
-//                this.chkEstatus.setSelected(true);
-//            } else {
-//                this.chkEstatus.setSelected(false);
-//            }
-//        }
-//        this.bBuscar.setVisible(!edit);
-//        this.bEliminar.setVisible(!edit);
-//        this.bGuardar.setVisible(!edit);
+        if(this.tBusqueda.getText().equals("")){
+            JOptionPane.showConfirmDialog(this,"necesita introducir el id del pedido para realizar la busqueda","error",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+        }else{
+        if (edit) {
+            edit = false;
+            this.tBusqueda.setEnabled(!edit);
+            p = new Pedidos();
+            idPedidos = pdao.UltimoIDPedidos();
+            idProveedor = reg.get(proSelected).getIdProveedor();
+            idSucursal = regS.get(suSelected).getIdSucursal();
+            p.setIdPedido(Integer.parseInt(this.tBusqueda.getText()));
+            p.setFechaRegistro(this.tRegistro.getText());
+            p.setFechaRecepcion(this.tRecepcion.getText());
+            p.setTotalPagar(0);
+            p.setCantidadPagada(0);
+            p.setEstatus("A");
+            p.setIdProveedor(idProveedor);
+            p.setIdSucursal(idSucursal);
+            p.setIdEmpleado(Integer.parseInt(this.tEmpleado.getText()));
+            if (this.chkEstatus.isSelected()) {
+                p.setEstatus("A");
+            } else {
+                p.setEstatus("I");
+            }
+            pdao.editarPedidos(p, p.getIdPedido());
+            noPaginas = pdao.cantPaginas();
+            cargar();
+            paginar();
+            limpiar();
+        } else {
+            edit = true;
+            this.tBusqueda.setEnabled(!edit);
+            this.tDatos.setModel(pdao.buscarId(tDatos, Integer.parseInt(this.tBusqueda.getText())));
+            p = pdao.buscarIdEdicion(Integer.parseInt(this.tBusqueda.getText()));
+            this.tRegistro.setText(String.valueOf(p.getFechaRegistro()));
+            this.tRecepcion.setText(String.valueOf(p.getFechaRecepcion()));
+            this.tEmpleado.setText(String.valueOf(p.getIdEmpleado()));
+            this.cProveedor.setSelectedIndex(this.buscarPr(p.getIdProveedor()));
+            this.cSucursal.setSelectedIndex(this.buscarSu(p.getIdSucursal()));
+            if (p.getEstatus().equals("A")) {
+                this.chkEstatus.setSelected(true);
+            } else {
+                this.chkEstatus.setSelected(false);
+            }                        
+                }
+        this.bBuscar.setVisible(!edit);
+        this.bEliminar.setVisible(!edit);
+        this.bGuardar.setVisible(!edit);
+        }
     }//GEN-LAST:event_bEditarActionPerformed
 
     private void tRecepcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tRecepcionActionPerformed
@@ -396,13 +494,39 @@ public class PPedidos extends javax.swing.JPanel {
         proSelected=this.cProveedor.getSelectedIndex();
         
     }//GEN-LAST:event_cProveedorItemStateChanged
-public void cargar() {
+
+    private void cSucursalItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cSucursalItemStateChanged
+        // TODO add your handling code here:
+        suSelected=this.cSucursal.getSelectedIndex();
+    }//GEN-LAST:event_cSucursalItemStateChanged
+private int buscarPr(int id){
+    int idx=-1;
+    for (int i = 0; i < reg.size(); i++) {
+        if(reg.get(i).getIdProveedor()==id)return i;
+    }
+    return idx;
+}
+private int buscarSu(int id){
+    int idx=-1;
+    for (int i = 0; i < regS.size(); i++) {
+        if(regS.get(i).getIdSucursal()==id)return i;
+    }
+    return idx;
+}
+   
+    public void cargar() {
         this.tDatos.setModel(pdao.cargarTabla(tDatos,pagina));
         reg=new ArrayList();
         reg=pdao.buscarProveedores();
         cProveedor.removeAllItems();
         for (int i = 0; i < reg.size(); i++) {
             this.cProveedor.addItem(reg.get(i).getNombre());
+        }
+        regS=new ArrayList();
+        regS=pdao.buscarSucursales();
+        cSucursal.removeAllItems();
+        for (int i = 0; i < regS.size(); i++) {
+            this.cSucursal.addItem(regS.get(i).getNombre());
         }
         this.repaint();
     }
@@ -422,11 +546,10 @@ public void cargar() {
     }
     
     public void limpiar() {
-        this.tBusqueda.setText("");
-        this.tEmpleado.setText("");
+        this.tBusqueda.setText("");        
         this.tRecepcion.setText("");
         this.tRegistro.setText("");
-        this.tSucursal.setText("");
+        this.tEmpleado.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -437,6 +560,7 @@ public void cargar() {
     private javax.swing.JButton bGuardar;
     private javax.swing.JButton bSiguiente;
     private javax.swing.JComboBox<String> cProveedor;
+    private javax.swing.JComboBox<String> cSucursal;
     private javax.swing.JCheckBox chkEstatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -452,6 +576,5 @@ public void cargar() {
     private javax.swing.JLabel tNumPage;
     private javax.swing.JTextField tRecepcion;
     private javax.swing.JTextField tRegistro;
-    private javax.swing.JTextField tSucursal;
     // End of variables declaration//GEN-END:variables
 }

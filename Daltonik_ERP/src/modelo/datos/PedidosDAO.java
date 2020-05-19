@@ -7,18 +7,20 @@ package modelo.datos;
 
 /**
  *
- * @author Rababau
+ * @author Nadia Cross
  */
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.beans.DProveedor;
+import modelo.beans.DSucursal;
 import modelo.beans.Pedidos;
-import modelo.beans.RegistroCompra;
 
 public class PedidosDAO {
     CallableStatement cts;
@@ -54,7 +56,7 @@ public class PedidosDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from Pedidos order by IdPedido offset ("+reg+"*10) rows fetch next 10 rows only");
+            r = cn.consultar("select * from Pedidos where estatus = 'A' order by IdPedido offset ("+reg+"*5) rows fetch next 5 rows only ");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -128,21 +130,36 @@ public class PedidosDAO {
             r = cn.consultar("select * from Pedidos where idPedido="+id+";");
             while (r.next()) {
                 Vector dato = new Vector();
-                dato.add(r.getInt(1));
-                dato.add(r.getString(2));
-                dato.add(r.getString(3));
-                dato.add(r.getDouble(4));
-                dato.add(r.getDouble(5));
-                dato.add(r.getString(6));
-                dato.add(r.getInt(7));
-                dato.add(r.getInt(8));
-                dato.add(r.getInt(9));
+                p.setIdPedido(r.getInt(1));//idpedido
+                p.setFechaRegistro(r.getString(2));//fRegistro
+                p.setFechaRecepcion(r.getString(3));//fRecepcion
+                p.setTotalPagar(r.getDouble(4));//totalpagar
+                p.setCantidadPagada(r.getDouble(5));//pagado
+                p.setEstatus(r.getString(6));//estatus
+                p.setIdProveedor(r.getInt(7));//idproveedor
+                p.setIdSucursal(r.getInt(8));//idSucursal
+                p.setIdEmpleado(r.getInt(9));//idEmpleado
             }
             return p;//jTable---jdatos
         } catch (Exception e) {
             return null;
         }
         }
+    
+//    public ArrayList<String> LlenarComboBusq(){
+//        ArrayList<String> listaBusq = new ArrayList<String>();
+//        
+//        try {
+//            r = cn.consultar("Select * from sucursales");
+//            while(r.next()){
+//                listaBusq.add(r.getString("nombre"));
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(PedidosDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return listaBusq;
+//    }
+    
     public ArrayList<DProveedor> buscarProveedores() {
         ArrayList<DProveedor> p=new ArrayList<DProveedor>();
         try {
@@ -150,6 +167,21 @@ public class PedidosDAO {
             while (r.next()) {
                 DProveedor dato = new DProveedor();
                 dato.setIdProveedor(r.getInt(1));
+                dato.setNombre(r.getString(2));
+                p.add(dato);
+            }
+            return p;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+        }
+    public ArrayList<DSucursal> buscarSucursales() {
+        ArrayList<DSucursal> p=new ArrayList<DSucursal>();
+        try {
+            r = cn.consultar("select idSucursal, nombre from Sucursales");
+            while (r.next()) {
+                DSucursal dato = new DSucursal();
+                dato.setIdSucursal(r.getInt(1));
                 dato.setNombre(r.getString(2));
                 p.add(dato);
             }
@@ -186,8 +218,10 @@ public class PedidosDAO {
     public void editarPedidos(Pedidos pd,int id){
         try {
             cn.ejecutar("update Pedidos set FechaRegistro='"+pd.getFechaRegistro()+"',FechaRecepcion='"+
-                    pd.getFechaRecepcion()+"',TotalPagar="+pd.getTotalPagar()+",CantidadPagada="+pd.getCantidadPagada()+",Estatus='"+
-                    pd.getEstatus()+"',IdProveedor="+pd.getIdProveedor()+",IdSucursal="+pd.getIdSucursal()+",IdEmpleado="+pd.getIdEmpleado()
+                    pd.getFechaRecepcion()
+//                    +"',TotalPagar="+pd.getTotalPagar()+",CantidadPagada="+pd.getCantidadPagada()
+                    +"',Estatus='"+ pd.getEstatus()+"',IdProveedor="+pd.getIdProveedor()+",IdSucursal="
+                    +pd.getIdSucursal()+",IdEmpleado="+pd.getIdEmpleado()
                     +"  where idPedido="+id+";");
         } catch (Exception e) {
         }
