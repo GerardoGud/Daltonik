@@ -327,7 +327,11 @@ public class PPagos extends javax.swing.JPanel {
                 p.setIdCuentaProveedor(ped.getIdProveedor());
                 p.setEstatus("A");
                 pdao.guardarPagos(p);
-                pdao.actualizarTotalPedido(ped.getIdPedido());
+                pdao.actualizarTotalPedido(ped.getIdPedido());ped=pdao.buscarPedido(Integer.parseInt(this.tPedido.getText()));
+                this.lTotal.setText("El monto total es: "+ped.getTotalPagar());
+                this.lAbonado.setText("Usted ha pagado:  "+ped.getCantidadPagada());
+                deuda=ped.getTotalPagar()-ped.getCantidadPagada();
+                this.lDebe.setText("Usted debe:      "+deuda);
             } else {
                 JOptionPane.showConfirmDialog(this, "No puede abonar mas de la cantidad adeudada", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             }
@@ -411,7 +415,7 @@ public class PPagos extends javax.swing.JPanel {
             JOptionPane.showConfirmDialog(this,"Necesita introducir el identificador de un pedido","Error de pago",JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
         }else{
             ped=pdao.buscarPedido(Integer.parseInt(this.tPedido.getText()));
-            if(ped.getEstatus().equals("T")||ped.getEstatus().equals("P")){
+            if(ped.getEstatus().equals("T")||ped.getEstatus().equals("P")||ped.getEstatus().equals("R")){
                 this.lTotal.setText("El monto total es: "+ped.getTotalPagar());
                 this.lAbonado.setText("Usted ha pagado:  "+ped.getCantidadPagada());
                 deuda=ped.getTotalPagar()-ped.getCantidadPagada();

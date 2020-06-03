@@ -15,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import modelo.pantallas.PCategorias;
+import modelo.pantallas.PCuentasProveedor;
+import modelo.pantallas.PContProveedor;
 import modelo.pantallas.PEmpaque;
 import modelo.pantallas.PExistencias;
 import modelo.pantallas.PImagenesProducto;
@@ -27,6 +29,7 @@ import modelo.pantallas.PPresentacionesProducto;
 import modelo.pantallas.PProductos;
 import modelo.pantallas.PProductosProveedor;
 import modelo.pantallas.PProveedor;
+import modelo.pantallas.PRecepcion;
 import modelo.pantallas.PSucursales;
 import modelo.pantallas.PTiposUsuario;
 import modelo.pantallas.PUsuario;
@@ -128,7 +131,7 @@ public class Principal extends javax.swing.JFrame{
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        panelIMG1 = new daltonik_erp.PanelIMG(fondo);
+        panelIMG1 = new daltonik_erp.PanelIMG();
         lUsuario = new javax.swing.JLabel();
         lHyF = new javax.swing.JLabel();
         Pantallas = new javax.swing.JTabbedPane();
@@ -144,6 +147,7 @@ public class Principal extends javax.swing.JFrame{
         mPedidos = new javax.swing.JMenuItem();
         mPDetalle = new javax.swing.JMenuItem();
         mPagos = new javax.swing.JMenuItem();
+        mRecepcion = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         mProducto = new javax.swing.JMenuItem();
         mPresentaciones = new javax.swing.JMenuItem();
@@ -318,6 +322,14 @@ public class Principal extends javax.swing.JFrame{
             }
         });
         jMenu2.add(mPagos);
+
+        mRecepcion.setText("Recepcion");
+        mRecepcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mRecepcionActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mRecepcion);
 
         jMenuBar1.add(jMenu2);
 
@@ -592,13 +604,13 @@ public class Principal extends javax.swing.JFrame{
     }//GEN-LAST:event_mProveedoresActionPerformed
 
     private void mCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCuentasActionPerformed
-        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
-                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+        PCuentasProveedor pv=new PCuentasProveedor(user,pwd);
+        this.Pantallas.add("Proveedores",pv);
     }//GEN-LAST:event_mCuentasActionPerformed
 
     private void mContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mContactosActionPerformed
-        JOptionPane.showMessageDialog(this, user+" esta funcion aun no ha sido implementada,\n"
-                + "disculme las molestias que esto le pueda causar","En construccion",JOptionPane.ERROR_MESSAGE);
+        PContProveedor pv=new PContProveedor(user,pwd);
+        this.Pantallas.add("Proveedores",pv);
     }//GEN-LAST:event_mContactosActionPerformed
 
     private void mSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSucursalesActionPerformed
@@ -610,6 +622,11 @@ public class Principal extends javax.swing.JFrame{
         PImagenesProducto p=new PImagenesProducto(user,pwd);
         this.Pantallas.add("Imagenes",p);
     }//GEN-LAST:event_mImagenesActionPerformed
+
+    private void mRecepcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mRecepcionActionPerformed
+        PRecepcion pr= new PRecepcion(user,pwd);
+        this.Pantallas.add("Recepcion de producto",pr);
+    }//GEN-LAST:event_mRecepcionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -679,6 +696,7 @@ public class Principal extends javax.swing.JFrame{
     private javax.swing.JMenuItem mProducto;
     private javax.swing.JMenuItem mProveedorProducto;
     private javax.swing.JMenuItem mProveedores;
+    private javax.swing.JMenuItem mRecepcion;
     private javax.swing.JMenuItem mSesion;
     private javax.swing.JMenuItem mSucursales;
     private javax.swing.JMenuItem mTipoUsu;

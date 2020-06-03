@@ -71,6 +71,53 @@ public class PedidoDetalleDAO {
             return null;
         }
     }
+    public DefaultTableModel cargarTablaRecepcion(JTable tDatos, int pedido) {
+        DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
+        tabla.setRowCount(0);
+        try {
+            r = cn.consultar("select pd.idPedidoDetalle ,(p.nombre+' '+e.nombre+' '+STR(e.capacidad, 5, 1)+u.siglas) producto,pd.cantPedida ,pd.cantRecibida, pd.cantRechazada, pd.cantAceptada\n" +
+"from PresentacionesProducto pp join Empaques e on e.idEmpaque=pp.idEmpaque join Productos p on p.idProducto=pp.idProducto \n" +
+"join UnidadMedida u on u.idUnidad=e.idUnidad join PedidoDetalle pd on pd.idPresentacion=pp.idPresentacion where pd.idPedido="+pedido);
+            while (r.next()) {
+                Vector dato = new Vector();
+                dato.add(r.getInt(1));
+                dato.add(r.getString(2));
+                dato.add(r.getInt(3));
+                dato.add(r.getInt(4));
+                dato.add(r.getInt(5));
+                dato.add(r.getInt(6));
+                tabla.addRow(dato);
+                tDatos.setModel(tabla);
+            }
+            return tabla;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public boolean guardarRecepcion(DefaultTableModel dat){
+        try {
+            for (int i = 0; i < dat.getRowCount(); i++) {
+                cn.ejecutar("update PedidoDetalle set cantRecibida="+dat.getValueAt(i, 3)+", cantRechazada="+dat.getValueAt(i, 4)
+                         +", cantAceptada="+dat.getValueAt(i, 5)+" where idPedidoDetalle="+dat.getValueAt(i, 0)+";");
+                r = cn.consultar("select  d.idPresentacion,p.idSucursal from Pedidos p join PedidoDetalle d on d.idPedido=p.idPedido where d.idPedidoDetalle="+dat.getValueAt(i, 0));
+                r.next();
+                Vector dato1 = new Vector();
+                dato1.add(r.getInt(1));
+                dato1.add(r.getInt(2));
+                r = cn.consultar("Select cantidad from ExistenciasSucursal where idPresentacion="+dato1.get(0)+" and idSucursal="+dato1.get(1));
+                if(r.next()){
+                    cn.ejecutar("update ExistenciasSucursal set cantidad=(Select cantidad from ExistenciasSucursal where idPresentacion="+dato1.get(0)+" and idSucursal="+dato1.get(1)+")+"+dat.getValueAt(i, 5)+" \n" +
+                        "where idPresentacion="+dato1.get(0)+" and idSucursal="+dato1.get(1)+";"); 
+                }else{
+                    cn.ejecutar("insert into ExistenciasSucursal values("+dato1.get(0)+","+dato1.get(1)+","+dat.getValueAt(i, 5)+");");
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
     public DefaultTableModel cargarId(JTable tDatos, int id) {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
@@ -252,5 +299,10 @@ public class PedidoDetalleDAO {
         } catch (Exception e) {
         }
     }
-    
+    public void setPedidoRecibido(int id){
+         try{
+             cn.ejecutar("update Pedidos set estatus='R' where idPedido=" + id + ";");
+         } catch (Exception e) {
+        }
+    }
 }

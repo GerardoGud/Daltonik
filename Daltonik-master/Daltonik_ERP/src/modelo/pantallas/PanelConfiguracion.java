@@ -358,6 +358,13 @@ public class PanelConfiguracion extends javax.swing.JPanel {
         arc.setArchivoRuta("C:\\Daltonik\\");
         String usu=nombre+"\n"+this.tServ.getText()+"\n"+tPuerto.getText()+"\n"+contrasena;
         arc.GuardarArchivo(usu);
+        arc.GuardarArchivo(usu);
+            arc = new Archivos("");
+            arc.setNombre("Conexion");
+            arc.setExtencion(".DConex");
+            arc.setArchivoRuta("C:\\Daltonik\\");
+            usu="jdbc:sqlserver://"+nomServ+":"+nPuerto+";databaseName=ERP2020";;
+            arc.GuardarArchivo(usu);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void guardar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardar3ActionPerformed
@@ -367,7 +374,7 @@ public class PanelConfiguracion extends javax.swing.JPanel {
             arc.setExtencion(".daltonik");
             arc.setArchivoRuta("C:\\Daltonik\\");
             String usu=nombre+"\n"+nomServ+"\n"+nPuerto+"\n"+String.copyValueOf(contra2.getPassword());
-            arc.GuardarArchivo(usu);
+            
         }
     }//GEN-LAST:event_guardar3ActionPerformed
 

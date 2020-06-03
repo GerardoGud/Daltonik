@@ -709,6 +709,13 @@ public class Instalador extends javax.swing.JFrame {
         crearBD();
         this.lAvisos.setText("ejecutando BD...");
         ejecutarBD();
+        this.lAvisos.setText("Creando archivo de conexion...");
+        Archivos arc = new Archivos("DConex");
+            arc.setNombre("Conexion");
+            arc.setArchivoRuta("C:\\Daltonik\\");
+            String usu="jdbc:sqlserver://localhost:1433;databaseName=ERP2020";
+            arc.GuardarArchivo(usu);
+        JOptionPane.showConfirmDialog(this,"Se ha terminado la configuracion de su sistema","Daltonik ERP",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }
     private void crearSQL(){
