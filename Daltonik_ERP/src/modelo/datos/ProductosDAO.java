@@ -8,9 +8,12 @@ package modelo.datos;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import modelo.beans.DProveedor;
+import modelo.beans.DSucursal;
 import modelo.beans.Productos;
 /**
  *
@@ -33,7 +36,11 @@ public class ProductosDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from Productos order by idProducto offset ("+reg+"*5) rows fetch next 5 rows only");
+            r = cn.consultar("SELECT p.idProducto,p.nombre ,p.descripcion,p.puntoReorden,p.precioCompra\n" +
+"      ,p.precioVenta,p.ingredienteActivo,p.bandaToxicologica,p.aplicacion,p.uso\n" +
+"      ,p.estatus,l.nombre,c.nombre\n" +
+"  FROM Productos p join Laboratorios l on l.idLaboratorio=p.idLaboratorio join \n" +
+"  Categorias c on c.idCategoria=p.idCategoria order by idProducto offset ("+reg+"*5) rows fetch next 5 rows only");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -47,8 +54,8 @@ public class ProductosDAO {
                 dato.add(r.getString(9));
                 dato.add(r.getString(10));
                 dato.add(r.getString(11));
-                dato.add(r.getInt(12));
-                dato.add(r.getInt(13));
+                dato.add(r.getString(12));
+                dato.add(r.getString(13));
                 tabla.addRow(dato);
                 tDatos.setModel(tabla);
             }
@@ -57,6 +64,36 @@ public class ProductosDAO {
             return null;
         }
     }
+    public ArrayList<DProveedor> buscarProveedores() {
+        ArrayList<DProveedor> p=new ArrayList<DProveedor>();
+        try {
+            r = cn.consultar("select idLaboratorio,nombre from Laboratorios");
+            while (r.next()) {
+                DProveedor dato = new DProveedor();
+                dato.setIdProveedor(r.getInt(1));
+                dato.setNombre(r.getString(2));
+                p.add(dato);
+            }
+            return p;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+        }
+    public ArrayList<DSucursal> buscarSucursales() {
+        ArrayList<DSucursal> p=new ArrayList<DSucursal>();
+        try {
+            r = cn.consultar("select idCategoria,nombre from Categorias");
+            while (r.next()) {
+                DSucursal dato = new DSucursal();
+                dato.setIdSucursal(r.getInt(1));
+                dato.setNombre(r.getString(2));
+                p.add(dato);
+            }
+            return p;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+        }
     public int cantPaginas(){
         int p=0,s=0;
         try {

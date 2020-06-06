@@ -8,9 +8,11 @@ package modelo.datos;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import modelo.beans.DProveedor;
 import modelo.beans.Empaque;
 /**
  *
@@ -32,7 +34,8 @@ public class EmpaqueDAO {
         DefaultTableModel tabla = (DefaultTableModel) tDatos.getModel();
         tabla.setRowCount(0);
         try {
-            r = cn.consultar("select * from Empaques where estatus='A' order by idEmpaque offset ("+reg+"*5) rows fetch next 5 rows only");
+            r = cn.consultar("select e.idEmpaque ,e.nombre,e.capacidad,e.estatus,u.nombre "
+                    + "from empaques e join UnidadMedida u on u.idUnidad=e.idUnidad where e.estatus='A' order by idEmpaque offset ("+reg+"*5) rows fetch next 5 rows only");
             while (r.next()) {
                 Vector dato = new Vector();
                 dato.add(r.getInt(1));
@@ -101,6 +104,35 @@ public class EmpaqueDAO {
         } catch (Exception e) {
             return null;
         }
+    }
+    public ArrayList<DProveedor> buscarProveedores() {
+        ArrayList<DProveedor> p=new ArrayList<DProveedor>();
+        try {
+            r = cn.consultar("select idUnidad,nombre from UnidadMedida");
+            while (r.next()) {
+                DProveedor dato = new DProveedor();
+                dato.setIdProveedor(r.getInt(1));
+                dato.setNombre(r.getString(2));
+                p.add(dato);
+            }
+            return p;//jTable---jdatos
+        } catch (Exception e) {
+            return null;
+        }
+        }
+    public int UltimoIdEmpaque() {
+        int idEmpaque = -1;
+        String sql = "select max(idEmpaque)+1 idEmpaque from Empaques";
+        try {
+            r = cn.consultar(sql);
+            if (r.next()) {
+                idEmpaque = r.getInt("idEmpaque");
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return idEmpaque;
     }
     public void guardarEmpaque(Empaque emp){
         try {
